@@ -13,7 +13,13 @@ jobs:
           sudo apt-get install graphviz
           wget -O ./plantuml.jar https://github.com/plantuml/plantuml/releases/download/v1.2024.8/plantuml-gplv2-1.2024.8.jar
           java -jar plantuml.jar -recursive ./docs/
+      - name: Check for changes
+        id: git-check
+        run: |
+          git status --porcelain
+          echo "changes=$(git status --porcelain | wc -l)" >> $GITHUB_OUTPUT
       - name: Commit diagrams
+        if: steps.git-check.outputs.changes > 0
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
