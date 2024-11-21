@@ -1,0 +1,114 @@
+@startuml
+interface Request {
+    + execute(): String
+}
+
+class NewChatRequest implements Request {
+    - database_handler: DatabaseHandler
+    - model_type: String
+    - model: String
+    + execute(): String
+}
+
+class MessageRequest implements Request {
+    - model_handler: ModelHandlerFactory
+    - database_handler: DatabaseHandler
+    - model_type: String
+    - model: String
+    - chat_ID: String
+    - chat_history: String
+    + execute(): String
+}
+
+class AllChatRequest implements Request {
+    - database_handler: DatabaseHandler
+    + execute(): String
+}
+
+class DeleteChatRequest implements Request {
+    - database_handler: DatabaseHandler
+    - chat_ID: String
+    + execute(): String
+}
+
+class ChatHistoryRequest implements Request {
+    - database_handler: DatabaseHandler
+    - chat_ID: String
+    + execute(): String
+}
+
+class RequestHandler {
+    - database_handler: DatabaseHandler
+    - model_handler_factory: ModelHandlerFactory
+    + parse(): Request()
+}
+
+class ModelHandlerFactory {
+    + create_model_handler(model_type): ModelHandler
+}
+
+class DatabaseHandler {
+    - connection: 
+    + get_model_for_chat(id): Tuple(String, String)
+    + create_new_chat(): String
+    + add_message_to_chat(id, message): void 
+    + get_chat_history(id): Dict
+    + get_all_chats(): Dict
+    + remove_chat(id): void
+}
+
+interface ModelHandler {
+    + send_message(message): void
+    + parse_message(): String 
+}
+
+class OpenAIHandler implements ModelHandler {
+    + send_message(message): void
+    + parse_message(): String 
+}
+
+class GoogleHandler implements ModelHandler {
+    + send_message(message): void
+    + parse_message(): String 
+}
+
+class AnthropicHandler implements ModelHandler {
+    + send_message(message): void
+    + parse_message(): String 
+}
+
+class MainScreenViewModel {
+    - mainScreenModel: MainScreenModel
+    + sendRequest(): void
+}
+
+
+
+class MainScreenModel {
+    - current_model_type: String
+    - current_model: String
+    - current_LLM_history: String
+    - models_list: String[]
+}
+
+class Settings {
+    - current_theme: String
+}
+
+RequestHandler o– DatabaseHandler
+RequestHandler o– ModelHandlerFactory
+DatabaseHandler *– connection
+
+NewChatRequest o– DatabaseHandler
+MessageRequest o– DatabaseHandler
+AllChatRequest o– DatabaseHandler
+DeleteChatRequest o– DatabaseHandler
+ChatHistoryRequest o– DatabaseHandler
+
+MessageRequest o– ModelHandlerFactory
+RequestHandler *– Request
+
+OpenAIHandler o– ModelHandler
+GoogleHandler o– ModelHandler
+AnthropicHandler o– ModelHandler
+@enduml
