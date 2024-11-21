@@ -1,0 +1,21 @@
+name: PlantUML Diagrams
+on:
+  push:
+    branches: [ main ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Generate PlantUML diagrams
+        run: |
+          sudo apt-get install graphviz
+          wget -O ./plantuml.jar https://github.com/plantuml/plantuml/releases/download/v1.2024.8/plantuml-gplv2-1.2024.8.jar
+          java -jar plantuml.jar -recursive ./docs/
+      - name: Commit diagrams
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add *.png
+          git commit -m "Automated diagram update"
+          git push
