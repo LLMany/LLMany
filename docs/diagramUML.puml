@@ -38,13 +38,17 @@ class ChatHistoryRequest implements Request {
 }
 
 class RequestHandler {
-    - database_handler: DatabaseHandler
+    - database_handler_factory: DatabaseHandlerFactory
     - model_handler_factory: ModelHandlerFactory
     + parse(): Request()
 }
 
 class ModelHandlerFactory {
     + create_model_handler(model_type): ModelHandler
+}
+
+class DatabaseHandlerFactory {
+    + create_database_handler(model_type): DatabaseHandler
 }
 
 class DatabaseHandler {
@@ -95,7 +99,7 @@ class Settings {
     - current_theme: String
 }
 
-RequestHandler o– DatabaseHandler
+RequestHandler o– DatabaseHandlerFactory
 RequestHandler o– ModelHandlerFactory
 DatabaseHandler *– connection
 
