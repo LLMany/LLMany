@@ -17,7 +17,7 @@ jobs:
         id: git-check
         run: |
           git status --porcelain
-          echo "changes=$(git status --porcelain | wc -l)" >> $GITHUB_OUTPUT
+          echo "changes=$(git status --porcelain | grep .png |wc -l)" >> $GITHUB_OUTPUT
       - name: Commit diagrams
         if: steps.git-check.outputs.changes > 0
         run: |
