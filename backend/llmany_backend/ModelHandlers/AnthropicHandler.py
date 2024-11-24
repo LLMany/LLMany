@@ -1,4 +1,4 @@
-from LLMany.backend.llmany_backend.ModelHandler import ModelHandler
+from llmany_backend.ModelHandler import ModelHandler
 
 
 class AnthropicHandler(ModelHandler):

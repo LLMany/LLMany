@@ -1,7 +1,7 @@
 
-from LLMany.backend.llmany_backend.DatabaseHandlerFactory import DatabaseHandlerFactory
-from LLMany.backend.llmany_backend.ModelHandlerFactory import ModelHandlerFactory
-from LLMany.backend.llmany_backend.Request import Request
+from llmany_backend.DatabaseHandlerFactory import DatabaseHandlerFactory
+from llmany_backend.ModelHandlerFactory import ModelHandlerFactory
+from llmany_backend.Request import Request
 
 
 class RequestHandler:

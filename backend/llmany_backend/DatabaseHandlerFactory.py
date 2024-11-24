@@ -1,4 +1,4 @@
-from LLMany.backend.llmany_backend.DatabaseHandler import DatabaseHandler
+from llmany_backend.DatabaseHandler import DatabaseHandler
 
 
 class DatabaseHandlerFactory:

@@ -1,6 +1,6 @@
-from LLMany.backend.llmany_backend.DatabaseHandler import DatabaseHandler
-from LLMany.backend.llmany_backend.ModelHandlerFactory import ModelHandlerFactory
-from LLMany.backend.llmany_backend.Request import Request
+from llmany_backend.DatabaseHandler import DatabaseHandler
+from llmany_backend.ModelHandlerFactory import ModelHandlerFactory
+from llmany_backend.Request import Request
 
 class MessageRequest(Request):
     def __init__(self, 
