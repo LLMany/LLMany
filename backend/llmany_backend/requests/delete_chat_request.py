@@ -1,5 +1,5 @@
-from llmany_backend.DatabaseHandler import DatabaseHandler
-from llmany_backend.Request import Request
+from llmany_backend.database_handler import DatabaseHandler
+from llmany_backend.request import Request
 
 class DeleteChatRequest(Request):
     def __init__(self, database_handler: 'DatabaseHandler', chat_ID: str) -> None:

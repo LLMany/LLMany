@@ -1,7 +1,7 @@
-from llmany_backend.ModelHandler import ModelHandler
+from llmany_backend.model_handler import ModelHandler
 
 
-class OpenAIHandler(ModelHandler):
+class GoogleHandler(ModelHandler):
     def send_message(self, message: str) -> None:
         pass
 
