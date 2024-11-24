@@ -51,8 +51,17 @@ class DatabaseHandlerFactory {
     + create_database_handler(model_type): DatabaseHandler
 }
 
-class DatabaseHandler {
-    - connection: 
+interface DatabaseHandler {
+    + get_model_for_chat(id): Tuple(String, String)
+    + create_new_chat(): String
+    + add_message_to_chat(id, message): void 
+    + get_chat_history(id): Dict
+    + get_all_chats(): Dict
+    + remove_chat(id): void
+}
+
+class SQLiteHandler implements DatabaseHandler{
+    - connection
     + get_model_for_chat(id): Tuple(String, String)
     + create_new_chat(): String
     + add_message_to_chat(id, message): void 
@@ -86,8 +95,6 @@ class MainScreenViewModel {
     + sendRequest(): void
 }
 
-
-
 class MainScreenModel {
     - current_model_type: String
     - current_model: String
@@ -112,7 +119,6 @@ ChatHistoryRequest o– DatabaseHandler
 MessageRequest o– ModelHandlerFactory
 RequestHandler *– Request
 
-OpenAIHandler o– ModelHandler
-GoogleHandler o– ModelHandler
-AnthropicHandler o– ModelHandler
+SQLiteHandler -|> DatabaseHandler
+
 @enduml
