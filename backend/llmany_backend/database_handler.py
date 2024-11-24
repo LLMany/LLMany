@@ -2,11 +2,7 @@ from typing import Tuple, Dict
 from abc import ABC, abstractmethod
 
 
-class DatabaseHandler(ABC):
-    @abstractmethod
-    def __init__(self, connection = None) -> None:
-        self.connection = connection 
-        
+class DatabaseHandler(ABC):        
     @abstractmethod
     def get_model_for_chat(self, id: str) -> Tuple[str, str]:
         return ...  
