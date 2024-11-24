@@ -27,4 +27,5 @@ jobs:
 
       - name: Run tests
         run: |
+          cd backend
           poetry run python -m pytest tests/
