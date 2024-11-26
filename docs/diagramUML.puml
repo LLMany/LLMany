@@ -119,6 +119,6 @@ ChatHistoryRequest o– DatabaseHandler
 MessageRequest o– ModelHandlerFactory
 RequestHandler *– Request
 
-SQLiteHandler -|> DatabaseHandler
+ModelHandlerFactory o– ModelHandler
 
 @enduml
