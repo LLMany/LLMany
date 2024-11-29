@@ -6,7 +6,7 @@ class SQLiteHandler(DatabaseHandler):
     def __init__(self, connection = None) -> None:
         self.connection = connection 
 
-    def get_model_for_chat(self, id: str) -> Tuple[str, str]:
+    def get_model_for_chat(self, id: str) -> Tuple[str, str]:   
         return ...  
 
     def create_new_chat(self) -> str:
