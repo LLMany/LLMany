@@ -1,9 +1,7 @@
 import pytest
 
 from llmany_backend.model_handler_factory import ModelHandlerFactory
-from llmany_backend.model_handlers.anthropic_handler import AnthropicHandler
-from llmany_backend.model_handlers.google_handler import GoogleHandler
-from llmany_backend.model_handlers.openai_handler import OpenAIHandler
+from llmany_backend.model_handlers import AnthropicHandler, GoogleHandler, OpenAIHandler
 
 
 @pytest.mark.parametrize(

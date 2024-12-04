@@ -1,7 +1,7 @@
 import pytest
 
 from llmany_backend.database_handler_factory import DatabaseHandlerFactory
-from llmany_backend.database_handlers.sqlite_handler import SQLiteHandler
+from llmany_backend.database_handlers import SQLiteHandler
 
 
 @pytest.mark.parametrize(
