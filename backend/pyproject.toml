@@ -11,6 +11,9 @@ python = "^3.12"
 pytest = "^8.3.3"
 pytest-mock = "^3.14.0"
 
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^4.0.1"
+
 [tool.pytest.ini_options]
 addopts = [
     "--import-mode=importlib",
@@ -19,4 +22,3 @@ addopts = [
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-
