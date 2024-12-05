@@ -5,9 +5,10 @@ from llmany_backend.database_handlers.sqlite_handler import SQLiteHandler
 
 
 @pytest.mark.parametrize(
-        "database_type, database_handler_class",
-        [("SQLite", SQLiteHandler),
-         ]
+    "database_type, database_handler_class",
+    [
+        ("SQLite", SQLiteHandler),
+    ],
 )
 def test_proper_handler_created(database_type, database_handler_class):
     factory = DatabaseHandlerFactory()

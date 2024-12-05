@@ -1,5 +1,6 @@
 from llmany_backend.model_handlers.openai_handler import OpenAIHandler
 
+
 def test_send_message(mocker):
     mock_create = mocker.patch("client.chat.completions.create")
     mock_create.return_value = {

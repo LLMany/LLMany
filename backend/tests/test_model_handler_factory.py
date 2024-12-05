@@ -7,10 +7,12 @@ from llmany_backend.model_handlers.openai_handler import OpenAIHandler
 
 
 @pytest.mark.parametrize(
-        "model_type, model_handler_class",
-        [("OpenAI", OpenAIHandler),
-         ("Google", GoogleHandler),
-         ("Anthropic", AnthropicHandler)]
+    "model_type, model_handler_class",
+    [
+        ("OpenAI", OpenAIHandler),
+        ("Google", GoogleHandler),
+        ("Anthropic", AnthropicHandler),
+    ],
 )
 def test_proper_handler_created(model_type, model_handler_class):
     factory = ModelHandlerFactory()
