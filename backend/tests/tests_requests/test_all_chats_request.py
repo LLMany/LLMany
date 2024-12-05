@@ -1,6 +1,6 @@
 from unittest.mock import MagicMock
 from llmany_backend.database_handler import DatabaseHandler
-from backend.llmany_backend.requests.all_chats_request import AllChatRequest
+from llmany_backend.requests.all_chats_request import AllChatRequest
 
 def test_all_chats_request_initialization():
     mock_database_handler = MagicMock(DatabaseHandler)
@@ -9,7 +9,7 @@ def test_all_chats_request_initialization():
     
     assert request.database_handler == mock_database_handler
 
-def test_execute_alls_chat_request(mocker):
+def test_execute_all_chats_request(mocker):
     mock_database_handler = MagicMock(DatabaseHandler)
     
     mock_database_handler.get_all_chats.return_value = ["Chat 1", "Chat 2", "Chat 3"]
