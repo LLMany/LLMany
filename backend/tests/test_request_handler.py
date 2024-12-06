@@ -6,7 +6,7 @@ from llmany_backend.model_handler_factory import ModelHandlerFactory
 from llmany_backend.requests import AllChatsRequest, DeleteChatRequest, ChatHistoryRequest, MessageRequest, NewChatRequest
 
 
-@pytest.mark.parametrize("request, expected_dict", [
+@pytest.mark.parametrize("request_string, expected_dict", [
     ('{'
     '"type": "new_chat",'    
     '"model_type": the type/provider of the model,'   
@@ -37,8 +37,8 @@ from llmany_backend.requests import AllChatsRequest, DeleteChatRequest, ChatHist
     "contents": "Hello world!"
     }),
 ])
-def test_parse(request, expected_dict, monkeypatch):
-    monkeypatch.setattr('bultins.input', lambda _ : request)
+def test_parse(request_string, expected_dict, monkeypatch):
+    monkeypatch.setattr('bultins.input', lambda _ : request_string)
     handler = RequestHandler(database_handler_factory=DatabaseHandlerFactory(), 
                              model_handler_factory=ModelHandlerFactory())
     
