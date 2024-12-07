@@ -12,5 +12,8 @@ class RequestHandler:
         self.database_handler_factory: DatabaseHandlerFactory = database_handler_factory
         self.model_handler_factory: ModelHandlerFactory = model_handler_factory
 
-    def parse(self) -> Request:
+    def parse(self) -> dict:
+        return ...
+    
+    def create_request(self, request_data :dict) -> Request:
         return ...
