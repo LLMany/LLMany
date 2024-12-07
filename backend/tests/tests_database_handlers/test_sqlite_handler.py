@@ -1,9 +1,20 @@
 import sqlite3
 import os
 import pytest
+import tempfile
 from unittest.mock import MagicMock
 
 from llmany_backend.database_handlers.sqlite_handler import SQLiteHandler
+
+
+@pytest.fixture
+def temp_file():
+    temp_file = tempfile.NamedTemporaryFile(delete=False)
+    temp_file_name = temp_file.name
+    yield temp_file_name
+    # Cleanup after test
+    if os.path.exists(temp_file_name):
+        os.remove(temp_file_name)
 
 
 @pytest.mark.parametrize(
@@ -16,8 +27,8 @@ from llmany_backend.database_handlers.sqlite_handler import SQLiteHandler
         (5, "Google", "Gemini 1.5"),
     ],
 )
-def test_get_model_for_chat(chat_id, model_type, model):
-    connection = sqlite3.connect("test.db")
+def test_get_model_for_chat(chat_id, model_type, model, temp_file):
+    connection = sqlite3.connect(temp_file)
     cursor = connection.cursor()
     cursor.execute(
         "CREATE TABLE IF NOT EXISTS chats (chat_id INTEGER PRIMARY KEY, name TEXT, model_type TEXT, model TEXT)"
@@ -39,38 +50,39 @@ def test_get_model_for_chat(chat_id, model_type, model):
     assert returned_model_type == model_type
     assert returned_model == model
 
+    cursor.close()
     connection.close()
-    os.remove("test.db")
 
 
 @pytest.mark.parametrize(
     "model_list",
     [
-        [(1, "OpenAI", "gpt-4o")],
-        [(2, "Anthropic", "claude-3.5"), (3, "OpenAI", "gpt-4")],
+        [("OpenAI", "gpt-4o")],
+        [("Anthropic", "claude-3.5"), ("OpenAI", "gpt-4")],
         [
-            (4, "Anthropic", "claude-2.5"),
-            (2, "Google", "Gemini 1.5"),
-            (1, "Google, Gemini 1.5 "),
+            ("Anthropic", "claude-2.5"),
+            ("Google", "Gemini 1.5"),
+            ("Google, Gemini 1.5 "),
         ],
     ],
 )
-def test_create_new_chat(model_list):
-    connection = sqlite3.connect("test.db")
+def test_create_new_chat(model_list, temp_file):
+    connection = sqlite3.connect(temp_file)
     cursor = connection.cursor()
     cursor.execute(
         "CREATE TABLE IF NOT EXISTS chats (chat_id INTEGER PRIMARY KEY, name TEXT, model_type TEXT, model TEXT)"
     )
     connection.commit()
+    cursor.close()
 
     for entry in model_list:
         model_type, model = entry
         handler = SQLiteHandler(connection)
         chat_id = handler.create_new_chat(model_type, model)
 
-        assert isinstance(chat_id, str)
-
         result = handler.get_model_for_chat(chat_id)
+
+        assert isinstance(chat_id, int)
 
         returned_model_type, returned_model = result
 
@@ -78,7 +90,6 @@ def test_create_new_chat(model_list):
         assert returned_model == model
 
     connection.close()
-    os.remove("test.db")
 
 
 def test_sqlite_handler_initialization():
@@ -89,7 +100,7 @@ def test_sqlite_handler_initialization():
     assert handler.connection == mock_connection
 
 
-def test_get_model_for_chat():
+def test_get_model_for_chat_mocked():
     mock_connection = MagicMock()
     handler = SQLiteHandler(mock_connection)
 
@@ -103,7 +114,7 @@ def test_get_model_for_chat():
     )
 
 
-def test_create_new_chat():
+def test_create_new_chat_mocked():
     mock_connection = MagicMock()
     handler = SQLiteHandler(mock_connection)
 
