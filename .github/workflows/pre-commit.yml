@@ -15,6 +15,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -26,15 +28,12 @@ jobs:
           pip install pre-commit
           pre-commit install
 
-      - name: Fetch changed Python files
+      - name: Get changed files
         id: changed-files
-        run: |
-          git diff --name-only ${{ github.event.before }} ${{ github.sha }} -- '*.py' > changed_files.txt
+        uses: tj-actions/changed-files@v44
 
       - name: Run Pre-Commit on Changed Files
         run: |
-          if [ -s changed_files.txt ]; then
-            xargs pre-commit run --files < changed_files.txt
-          else
-            echo "No Python files to check."
-          fi
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            pre-commit run --files "$file" || exit 1
+          done
