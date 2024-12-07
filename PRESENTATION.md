@@ -13,7 +13,7 @@ for the requests sent from frontend
 
 
 # Summary of unit tests
-Metrics:   
+Metrics:
 - 26 unit tests in total
 - 90% Code coverage in backend
 
@@ -25,7 +25,7 @@ Example test results:
 
 Problems encountered during testing:
 - difficulties predicting the exact input and output format for many methods
-    - we created an API contract to specify the format of 
+    - we created an API contract to specify the format of
     information sent in from the frontend
     - tests are designed with easy changing of the expected
     format in mind

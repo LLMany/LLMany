@@ -1,0 +1,40 @@
+name: Pre-Commit Check
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      -'*'
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '^3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install pre-commit
+          pre-commit install
+
+      - name: Fetch changed Python files
+        id: changed-files
+        run: |
+          git diff --name-only ${{ github.event.before }} ${{ github.sha }} -- '*.py' > changed_files.txt
+
+      - name: Run Pre-Commit on Changed Files
+        run: |
+          if [ -s changed_files.txt ]; then
+            xargs pre-commit run --files < changed_files.txt
+          else
+            echo "No Python files to check."
+          fi

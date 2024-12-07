@@ -22,3 +22,12 @@ def test_execute_all_chats_request(mocker):
     
     mock_database_handler.get_all_chats.assert_called_once()
 
+    mock_database_handler.get_all_chats.return_value = ["Chat 1", "Chat 2", "Chat 3"]
+
+    request = AllChatsRequest(mock_database_handler)
+
+    result = request.execute()
+
+    assert result == ["Chat 1", "Chat 2", "Chat 3"]
+
+    mock_database_handler.get_all_chats.assert_called_once()

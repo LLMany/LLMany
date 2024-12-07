@@ -1,10 +1,9 @@
 from llmany_backend.model_handlers.anthropic_handler import AnthropicHandler
 
+
 def test_send_message(mocker):
     mock_create = mocker.patch("AnthropicHandler.client.messages.create")
-    mock_create.return_value = {
-        "content": "Hello, this is Skynet!"
-    }
+    mock_create.return_value = {"content": "Hello, this is Skynet!"}
 
     handler = AnthropicHandler()
 

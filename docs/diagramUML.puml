@@ -54,7 +54,7 @@ class DatabaseHandlerFactory {
 interface DatabaseHandler {
     + get_model_for_chat(id): Tuple(String, String)
     + create_new_chat(): String
-    + add_message_to_chat(id, message): void 
+    + add_message_to_chat(id, message): void
     + get_chat_history(id): Dict
     + get_all_chats(): Dict
     + remove_chat(id): void
@@ -64,7 +64,7 @@ class SQLiteHandler implements DatabaseHandler{
     - connection
     + get_model_for_chat(id): Tuple(String, String)
     + create_new_chat(): String
-    + add_message_to_chat(id, message): void 
+    + add_message_to_chat(id, message): void
     + get_chat_history(id): Dict
     + get_all_chats(): Dict
     + remove_chat(id): void
@@ -72,22 +72,22 @@ class SQLiteHandler implements DatabaseHandler{
 
 interface ModelHandler {
     + send_message(message): void
-    + parse_message(): String 
+    + parse_message(): String
 }
 
 class OpenAIHandler implements ModelHandler {
     + send_message(message): void
-    + parse_message(): String 
+    + parse_message(): String
 }
 
 class GoogleHandler implements ModelHandler {
     + send_message(message): void
-    + parse_message(): String 
+    + parse_message(): String
 }
 
 class AnthropicHandler implements ModelHandler {
     + send_message(message): void
-    + parse_message(): String 
+    + parse_message(): String
 }
 
 class MainScreenViewModel {
