@@ -5,23 +5,23 @@ from abc import ABC, abstractmethod
 class DatabaseHandler(ABC):
     @abstractmethod
     def get_model_for_chat(self, id: str) -> Tuple[str, str]:
-        return ...
-
-    @abstractmethod
-    def create_new_chat(self) -> str:
-        return ...
-
-    @abstractmethod
-    def add_message_to_chat(self, id: str, message: str) -> None:
         pass
 
     @abstractmethod
-    def get_chat_history(self, id: str) -> Dict:
-        return ...
+    def create_new_chat(self, model_type: str, model: str) -> int:
+        pass
+
+    @abstractmethod
+    def add_message_to_chat(self, chat_id: int, role: str, message: str) -> None:
+        pass
+
+    @abstractmethod
+    def get_chat_history(self, chat_id: int) -> list[tuple]:
+        pass
 
     @abstractmethod
     def get_all_chats(self) -> Dict:
-        return ...
+        pass
 
     @abstractmethod
     def remove_chat(self, id: str) -> None:
