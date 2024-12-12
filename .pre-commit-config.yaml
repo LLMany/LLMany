@@ -17,7 +17,7 @@ repos:
     hooks:
       - id: mypy
         name: mypy
-        entry: "./run-mypy"
+        entry: "./run-mypy.sh"
         language: system
         files: '^backend/'
         types: [python]
