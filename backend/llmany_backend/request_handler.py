@@ -3,6 +3,13 @@ import json
 from llmany_backend.database_handler_factory import DatabaseHandlerFactory
 from llmany_backend.model_handler_factory import ModelHandlerFactory
 from llmany_backend.request import Request
+from llmany_backend.requests import (
+    AllChatsRequest,
+    ChatHistoryRequest,
+    DeleteChatRequest,
+    NewChatRequest,
+    MessageRequest,
+)
 
 
 class RequestHandler:
@@ -19,4 +26,16 @@ class RequestHandler:
         return json.loads(request_json)
 
     def create_request(self, request_data: dict) -> Request:
-        raise NotImplementedError("create_request method must be implemented")
+        match request_data["type"]:
+            case "AllChatsRequest":
+                return AllChatsRequest()
+            case "ChatHistoryRequest":
+                return ChatHistoryRequest(request_data["chat_id"])
+            case "DeleteChatRequest":
+                return DeleteChatRequest(request_data["chat_id"])
+            case "NewChatRequest":
+                return NewChatRequest()
+            case "MessageRequest":
+                return MessageRequest(request_data["message"])
+            case _:
+                raise ValueError("Invalid request type")
