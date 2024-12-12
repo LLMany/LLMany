@@ -23,10 +23,15 @@ jobs:
         with:
           python-version: '^3.12'
 
+      - name: Install poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+
       - name: Install dependencies
         run: |
-          pip install pre-commit
-          pre-commit install
+          cd backend
+          poetry install
+          poetry run pre-commit install
 
       - name: Get changed files
         id: changed-files
