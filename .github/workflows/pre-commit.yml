@@ -39,6 +39,7 @@ jobs:
 
       - name: Run Pre-Commit on Changed Files
         run: |
+          cd backend
           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
             poetry run pre-commit run --files "$file" || exit 1
           done
