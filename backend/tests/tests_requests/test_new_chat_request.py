@@ -1,6 +1,6 @@
 import builtins
 from unittest.mock import MagicMock
-from requests import NewChatRequest
+from llmany_backend.requests import NewChatRequest
 from llmany_backend.database_handler import DatabaseHandler
 import json
 
