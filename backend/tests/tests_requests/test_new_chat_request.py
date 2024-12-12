@@ -4,6 +4,7 @@ from requests import NewChatRequest
 from llmany_backend.database_handler import DatabaseHandler
 import json
 
+
 def test_new_chat_request_init():
     mock_database_handler = MagicMock(DatabaseHandler)
 
@@ -32,7 +33,9 @@ def test_execute_new_chat_request(mocker):
 
     mock_database_handler.create_new_chat.return_value = 123
 
-    request = NewChatRequest(database_handler=mock_database_handler, model_type="gpt-3", model="gpt-4")
+    request = NewChatRequest(
+        database_handler=mock_database_handler, model_type="gpt-3", model="gpt-4"
+    )
 
     mocker.patch("builtins.print")
 
@@ -45,7 +48,6 @@ def test_execute_new_chat_request(mocker):
         "model_type": "gpt-3",
         "model": "openai",
         "chat_id": 123,
-        }
-    
-    builtins.print.assert_called_once_with(json.dumps(expected_output))
+    }
 
+    builtins.print.assert_called_once_with(json.dumps(expected_output))

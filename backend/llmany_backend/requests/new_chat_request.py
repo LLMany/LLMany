@@ -2,6 +2,7 @@ from llmany_backend.database_handler import DatabaseHandler
 from llmany_backend.request import Request
 import json
 
+
 class NewChatRequest(Request):
     def __init__(
         self, database_handler: DatabaseHandler, model_type: str, model: str
@@ -15,11 +16,13 @@ class NewChatRequest(Request):
         return cls(database_handler, request["model_type"], request["model"])
 
     def execute(self) -> None:
-        new_chat_ID: int = self.database_handler.create_new_chat(self.model_type, self.model)
+        new_chat_ID: int = self.database_handler.create_new_chat(
+            self.model_type, self.model
+        )
         returned_value = {
-                        "type": "new_chat",
-                        "model_type": self.model_type,
-                        "model": self.model,
-                        "chat_id": new_chat_ID
-                    }
+            "type": "new_chat",
+            "model_type": self.model_type,
+            "model": self.model,
+            "chat_id": new_chat_ID,
+        }
         print(json.dumps(returned_value))
