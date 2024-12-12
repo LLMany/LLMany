@@ -6,8 +6,8 @@ from llmany_backend.request import Request
 class MessageRequest(Request):
     def __init__(
         self,
-        model_handler: "ModelHandlerFactory",
-        database_handler: "DatabaseHandler",
+        model_handler: ModelHandlerFactory,
+        database_handler: DatabaseHandler,
         model_type: str,
         model: str,
         chat_ID: str,
@@ -20,5 +20,9 @@ class MessageRequest(Request):
         self.chat_ID: str = chat_ID
         self.chat_history: str = chat_history
 
+    @classmethod
+    def from_dict(cls, request: dict, database_handler: DatabaseHandler):
+        raise NotImplementedError
+
     def execute(self) -> str:
-        raise NotImplementedError("Subclasses must implement the execute method")
+        raise NotImplementedError
