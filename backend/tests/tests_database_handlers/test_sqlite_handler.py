@@ -1,20 +1,8 @@
 import sqlite3
-import os
 import pytest
-import tempfile
 from unittest.mock import MagicMock
 
 from llmany_backend.database_handlers.sqlite_handler import SQLiteHandler
-
-
-@pytest.fixture
-def temp_file():
-    temp_file = tempfile.NamedTemporaryFile(delete=False)
-    temp_file_name = temp_file.name
-    yield temp_file_name
-    # Cleanup after test
-    if os.path.exists(temp_file_name):
-        os.remove(temp_file_name)
 
 
 @pytest.mark.parametrize(

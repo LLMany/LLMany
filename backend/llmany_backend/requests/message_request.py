@@ -21,7 +21,12 @@ class MessageRequest(Request):
         self.chat_history: str = chat_history
 
     @classmethod
-    def from_dict(cls, request: dict, database_handler: DatabaseHandler):
+    def from_dict(
+        cls,
+        request: dict,
+        database_handler: DatabaseHandler,
+        model_handler_factory: ModelHandlerFactory,
+    ):
         raise NotImplementedError
 
     def execute(self) -> str:
