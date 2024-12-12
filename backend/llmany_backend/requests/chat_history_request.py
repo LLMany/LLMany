@@ -8,4 +8,4 @@ class ChatHistoryRequest(Request):
         self.chat_ID: str = chat_ID
 
     def execute(self) -> str:
-        return ...
+        raise NotImplementedError

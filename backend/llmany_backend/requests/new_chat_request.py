@@ -11,4 +11,4 @@ class NewChatRequest(Request):
         self.model: str = model
 
     def execute(self) -> str:
-        return ...
+        raise NotImplementedError

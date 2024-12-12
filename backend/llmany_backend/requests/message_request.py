@@ -21,4 +21,4 @@ class MessageRequest(Request):
         self.chat_history: str = chat_history
 
     def execute(self) -> str:
-        return ...
+        raise NotImplementedError("Subclasses must implement the execute method")
