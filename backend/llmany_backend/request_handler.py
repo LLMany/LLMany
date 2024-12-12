@@ -13,7 +13,7 @@ class RequestHandler:
         self.model_handler_factory: ModelHandlerFactory = model_handler_factory
 
     def parse(self) -> dict:
-        return ...
-    
-    def create_request(self, request_data :dict) -> Request:
-        return ...
+        raise NotImplementedError("Subclasses must implement this method")
+
+    def create_request(self, request_data: dict) -> Request:
+        raise NotImplementedError("Subclasses must implement this method")
