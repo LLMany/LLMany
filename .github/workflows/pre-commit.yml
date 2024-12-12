@@ -23,10 +23,15 @@ jobs:
         with:
           python-version: '^3.12'
 
+      - name: Install poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+
       - name: Install dependencies
         run: |
-          pip install pre-commit
-          pre-commit install
+          cd backend
+          poetry install
+          poetry run pre-commit install
 
       - name: Get changed files
         id: changed-files
@@ -34,6 +39,7 @@ jobs:
 
       - name: Run Pre-Commit on Changed Files
         run: |
+          cd backend
           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
-            pre-commit run --files "$file" || exit 1
+            poetry run pre-commit run --files "$file" || exit 1
           done
