@@ -24,8 +24,7 @@ class RequestHandler:
         self.model_handler_factory: ModelHandlerFactory = model_handler_factory
         self.connection = connection
 
-    def parse(self) -> dict:
-        request_json = input()
+    def parse(self, request_json: str) -> dict:
         return json.loads(request_json)
 
     def create_request(self, request_data: dict) -> Request:
