@@ -18,7 +18,7 @@ Returned value:
 "chat_id": id of the chat
 }
 ```
-## Delete request
+## Delete chat request
 Request:
 ```
 {
