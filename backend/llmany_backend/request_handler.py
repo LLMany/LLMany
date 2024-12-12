@@ -29,40 +29,41 @@ class RequestHandler:
         return json.loads(request_json)
 
     def create_request(self, request_data: dict) -> Request:
+        database = "SQLite3"
         match request_data["type"]:
-            case "AllChatsRequest":
+            case "all_chats":
                 return AllChatsRequest.from_dict(
                     request_data,
                     self.database_handler_factory.create_database_handler(
-                        "SQLite", self.connection
+                        database, self.connection
                     ),
                 )
-            case "ChatHistoryRequest":
+            case "chat_history":
                 return ChatHistoryRequest.from_dict(
                     request_data,
                     self.database_handler_factory.create_database_handler(
-                        "SQLite", self.connection
+                        database, self.connection
                     ),
                 )
-            case "DeleteChatRequest":
+            case "delete_chat":
                 return DeleteChatRequest.from_dict(
                     request_data,
                     self.database_handler_factory.create_database_handler(
-                        "SQLite", self.connection
+                        database, self.connection
                     ),
                 )
-            case "NewChatRequest":
+            case "new_chat":
                 return NewChatRequest.from_dict(
                     request_data,
                     self.database_handler_factory.create_database_handler(
-                        "SQLite", self.connection
+                        database, self.connection
                     ),
                 )
-            case "MessageRequest":
+            case "message":
                 return MessageRequest.from_dict(
                     request_data,
                     self.database_handler_factory.create_database_handler(
-                        "SQLite", self.connection
+                        database, self.connection
                     ),
                     self.model_handler_factory,
                 )
