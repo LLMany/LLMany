@@ -4,10 +4,10 @@ version = "0.1.0"
 description = ""
 authors = ["Oskar Kulinski", "Kajetan Ożóg", "Michał Smorągiewicz"]
 readme = "README.md"
-package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.12"
+openai = "^1.57.1"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^4.0.1"
