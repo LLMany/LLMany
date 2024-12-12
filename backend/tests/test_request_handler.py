@@ -19,17 +19,14 @@ from llmany_backend.requests import (
     "request_string, expected_dict",
     [
         (
-            "{"
-            '"type": "new_chat",'
-            '"model_type": the type/provider of the model,'
-            '"model": the name of the model}',
-            {"type": "new_chat", "model_type": "ChatGPT", "model": "GPT-4o"},
+            "{" '"type": "new_chat",' '"model_type": "OpenAI",' '"model": "GPT-4o"}',
+            {"type": "new_chat", "model_type": "OpenAI", "model": "GPT-4o"},
         ),
         (
-            '{"type": "delete_chat", "chat_id": "1234",}',
+            '{"type": "delete_chat", "chat_id": 1234}',
             {
                 "type": "delete_chat",
-                "chat_id": "1234",
+                "chat_id": 1234,
             },
         ),
         (

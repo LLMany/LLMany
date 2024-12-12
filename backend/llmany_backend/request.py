@@ -3,5 +3,5 @@ from abc import ABC, abstractmethod
 
 class Request(ABC):
     @abstractmethod
-    def execute(self) -> str:
+    def execute(self) -> None:
         pass

@@ -10,5 +10,5 @@ class AllChatsRequest(Request):
     def from_dict(cls, request: dict, database_handler: DatabaseHandler):
         raise NotImplementedError
 
-    def execute(self) -> str:
+    def execute(self) -> None:
         raise NotImplementedError
