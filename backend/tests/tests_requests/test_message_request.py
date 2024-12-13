@@ -1,17 +1,21 @@
-from unittest.mock import MagicMock
 from llmany_backend.database_handler import DatabaseHandler
 from llmany_backend.model_handler_factory import ModelHandlerFactory
 from llmany_backend.requests.message_request import MessageRequest
+from unittest.mock import MagicMock, patch
 
 
 def test_message_request_initialization():
     mock_model_handler = MagicMock(ModelHandlerFactory)
     mock_database_handler = MagicMock(DatabaseHandler)
 
-    model_type = "GPT-4"
-    model = "gpt-4-model"
-    chat_id = "12345"
-    chat_history = "Previous conversation"
+    model_type = "gpt-4"
+    model = "openai"
+    chat_id = 12345
+    chat_history = [
+        {"role": "user", "content": "Hello there"},
+        {"role": "assistant", "content": "General Kenobi"},
+    ]
+    contents = "Hello!"
 
     request = MessageRequest(
         mock_model_handler,
@@ -20,6 +24,7 @@ def test_message_request_initialization():
         model,
         chat_id,
         chat_history,
+        contents,
     )
 
     assert request.model_handler == mock_model_handler
@@ -28,32 +33,83 @@ def test_message_request_initialization():
     assert request.model == model
     assert request.chat_ID == chat_id
     assert request.chat_history == chat_history
+    assert request.contents == contents
 
 
-def test_execute_message_request(mocker):
-    mock_model_handler = MagicMock(ModelHandlerFactory)
+def test_message_request_from_dict():
     mock_database_handler = MagicMock(DatabaseHandler)
+    mock_model_handler_factory = MagicMock(ModelHandlerFactory)
 
-    mock_model_handler.send_message.return_value = "Message sent successfully"
+    request_data = {"chat_id": 12345, "contents": "Hello!"}
 
-    model_type = "GPT-4"
-    model = "gpt-4-model"
-    chat_id = "12345"
-    chat_history = "Previous conversation"
+    mock_database_handler.get_model_for_chat.return_value = ("gpt-4", "openai")
+    mock_database_handler.get_chat_history.return_value = [
+        ("user", "Hello there"),
+        ("assistant", "General Kenobi"),
+    ]
+
+    request = MessageRequest.from_dict(
+        request_data, mock_database_handler, mock_model_handler_factory
+    )
+
+    assert request.model_type == "gpt-4"
+    assert request.model == "openai"
+    assert request.chat_ID == 12345
+    assert request.chat_history == [
+        {"role": "user", "content": "Hello there"},
+        {"role": "assistant", "content": "General Kenobi"},
+    ]
+    assert request.contents == "Hello!"
+
+    mock_database_handler.get_model_for_chat.assert_called_once_with(12345)
+    mock_database_handler.get_chat_history.assert_called_once_with(12345)
+
+
+def test_message_request_execute():
+    mock_database_handler = MagicMock(DatabaseHandler)
+    mock_model_handler_factory = MagicMock(ModelHandlerFactory)
+    mock_model_handler = MagicMock()
+
+    mock_model_handler_factory.create_model_handler.return_value = mock_model_handler
+    mock_model_handler.send_message.return_value = "Hello, user!"
+
+    chat_id = 12345
+    chat_history = [
+        {"role": "user", "content": "Hello there"},
+        {"role": "assistant", "content": "General Kenobi"},
+    ]
+    contents = "How are you?"
 
     request = MessageRequest(
-        mock_model_handler,
+        mock_model_handler_factory,
         mock_database_handler,
-        model_type,
-        model,
+        "gpt-4",
+        "openai",
         chat_id,
         chat_history,
+        contents,
     )
 
-    result = request.execute()
+    with patch("builtins.print") as mock_print:
+        request.execute()
 
-    assert result == "Message sent successfully"
+        assert request.chat_history == [
+            {"role": "user", "content": "Hello there"},
+            {"role": "assistant", "content": "General Kenobi"},
+            {"role": "user", "content": "How are you?"},
+        ]
 
-    mock_model_handler.send_message.assert_called_once_with(
-        model_type=model_type, model=model, chat_id=chat_id, chat_history=chat_history
-    )
+        mock_database_handler.add_message_to_chat.assert_any_call(
+            chat_id, "user", "How are you?"
+        )
+        mock_database_handler.add_message_to_chat.assert_any_call(
+            chat_id, "assistant", "Hello, user!"
+        )
+
+        mock_model_handler.send_message.assert_called_once_with(
+            model="openai", messages=request.chat_history
+        )
+
+        mock_print.assert_called_once_with(
+            '{"type": "message", "chat_id": 12345, "content": "Hello, user!"}'
+        )
