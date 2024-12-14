@@ -59,7 +59,7 @@ class SQLiteHandler(DatabaseHandler):
         self.connection.commit()
         cursor.close()
 
-    def get_chat_history(self, chat_id: int) -> list[tuple]:
+    def get_chat_history(self, chat_id: int) -> list[dict]:
         cursor = self.connection.cursor()
 
         cursor.execute(
@@ -71,7 +71,9 @@ class SQLiteHandler(DatabaseHandler):
 
         cursor.close()
 
-        return result
+        dict_result = [{"role": role, "content": content} for role, content in result]
+
+        return dict_result
 
     def get_all_chats(self) -> Dict:
         raise NotImplementedError
