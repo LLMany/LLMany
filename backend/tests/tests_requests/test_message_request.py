@@ -44,8 +44,8 @@ def test_message_request_from_dict():
 
     mock_database_handler.get_model_for_chat.return_value = ("gpt-4", "openai")
     mock_database_handler.get_chat_history.return_value = [
-        ("user", "Hello there"),
-        ("assistant", "General Kenobi"),
+        {"role": "user", "content": "Hello there"},
+        {"role": "assistant", "content": "General Kenobi"},
     ]
 
     request = MessageRequest.from_dict(

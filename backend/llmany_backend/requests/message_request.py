@@ -34,9 +34,7 @@ class MessageRequest(Request):
         model_info: tuple[str, str] = database_handler.get_model_for_chat(
             request["chat_id"]
         )
-        chat_history = cls.convert_tuples_to_dicts(
-            database_handler.get_chat_history(request["chat_id"])
-        )
+        chat_history = database_handler.get_chat_history(request["chat_id"])
 
         return cls(
             model_handler_factory,
@@ -60,7 +58,3 @@ class MessageRequest(Request):
             "content": response,
         }
         print(json.dumps(returned_value))
-
-    @staticmethod
-    def convert_tuples_to_dicts(tuples: list[tuple]) -> list[dict[str, str]]:
-        return [{"role": role, "content": content} for role, content in tuples]
