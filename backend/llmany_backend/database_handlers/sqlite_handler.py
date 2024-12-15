@@ -59,7 +59,7 @@ class SQLiteHandler(DatabaseHandler):
         self.connection.commit()
         cursor.close()
 
-    def get_chat_history(self, chat_id: int) -> list[dict]:
+    def get_chat_history(self, chat_id: int) -> list[dict[str, str]]:
         cursor = self.connection.cursor()
 
         cursor.execute(
