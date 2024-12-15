@@ -13,11 +13,8 @@ class ChatHistoryRequest(Request):
         return cls(database_handler, request["chat_id"])
 
     def execute(self) -> None:
-        chat_history_tuples: list[tuple[str, str]] = (
-            self.database_handler.get_chat_history(self.chat_ID)
-        )
-        chat_history: list[dict[str, str]] = self.convert_tuples_to_dicts(
-            chat_history_tuples
+        chat_history: list[dict[str, str]] = self.database_handler.get_chat_history(
+            self.chat_ID
         )
         returned_value = {
             "type": "chat_history",
@@ -25,7 +22,3 @@ class ChatHistoryRequest(Request):
             "messages": chat_history,
         }
         print(json.dumps(returned_value))
-
-    @staticmethod
-    def convert_tuples_to_dicts(tuples: list[tuple]) -> list[dict[str, str]]:
-        return [{"role": role, "content": content} for role, content in tuples]
