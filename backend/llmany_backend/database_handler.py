@@ -16,7 +16,7 @@ class DatabaseHandler(ABC):
         pass
 
     @abstractmethod
-    def get_chat_history(self, chat_id: int) -> list[tuple]:
+    def get_chat_history(self, chat_id: int) -> list[dict[str, str]]:
         pass
 
     @abstractmethod
