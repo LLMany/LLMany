@@ -1,10 +1,10 @@
-from typing import Tuple, Dict
+from typing import Dict
 from abc import ABC, abstractmethod
 
 
 class DatabaseHandler(ABC):
     @abstractmethod
-    def get_model_for_chat(self, id: str) -> Tuple[str, str]:
+    def get_model_for_chat(self, id: str) -> dict[str, str]:
         pass
 
     @abstractmethod

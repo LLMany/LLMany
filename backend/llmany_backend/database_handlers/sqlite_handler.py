@@ -1,4 +1,4 @@
-from typing import Tuple, Dict
+from typing import Dict
 import sqlite3
 
 from llmany_backend.database_handler import DatabaseHandler
@@ -8,8 +8,21 @@ class SQLiteHandler(DatabaseHandler):
     def __init__(self, connection: sqlite3.Connection) -> None:
         self.connection: sqlite3.Connection = connection
 
-    def get_model_for_chat(self, id: str) -> Tuple[str, str]:
-        raise NotImplementedError
+    def get_model_for_chat(self, chat_id: str) -> dict[str, str]:
+        cursor = self.connection.cursor()
+
+        cursor.execute(
+            "SELECT model_type, model,FROM chats WHERE chat_id = ?",
+            (chat_id,),
+        )
+
+        result = cursor.fetchone()
+
+        cursor.close()
+
+        dict_result = {"model_type": result[0], "model": result[1]}
+
+        return dict_result
 
     def create_new_chat(self, model_type: str, model: str) -> int:
         cursor = self.connection.cursor()
