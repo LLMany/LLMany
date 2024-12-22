@@ -1,4 +1,3 @@
-from typing import Dict
 import sqlite3
 
 from llmany_backend.database_handler import DatabaseHandler
@@ -88,8 +87,27 @@ class SQLiteHandler(DatabaseHandler):
 
         return dict_result
 
-    def get_all_chats(self) -> Dict:
-        raise NotImplementedError
+    def get_all_chats(self) -> list[dict[str, str]]:
+        cursor = self.connection.cursor()
 
-    def remove_chat(self, id: str) -> None:
-        raise NotImplementedError
+        cursor.execute(
+            "SELECT chat_id, model_type, model FROM chats",
+        )
+
+        result = cursor.fetchall()
+
+        cursor.close()
+
+        dict_result = [
+            {"chat_id": chat_id, "model_type": model_type, "model": model}
+            for chat_id, model_type, model in result
+        ]
+
+        return dict_result
+
+    def remove_chat(self, chat_id: str) -> None:
+        cursor = self.connection.cursor()
+
+        cursor.execute("DELETE FROM chats WHERE chat_id = ?", (chat_id,))
+
+        cursor.close()

@@ -1,4 +1,3 @@
-from typing import Dict
 from abc import ABC, abstractmethod
 
 
@@ -20,7 +19,7 @@ class DatabaseHandler(ABC):
         pass
 
     @abstractmethod
-    def get_all_chats(self) -> Dict:
+    def get_all_chats(self) -> list[dict[str, str]]:
         pass
 
     @abstractmethod
