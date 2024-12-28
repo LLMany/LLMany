@@ -1,17 +1,40 @@
 import sqlite3
 
-from llmany_backend.database_handler import DatabaseHandler
+from llmany_backend.database_handler import DatabaseHandler, DatabaseError
 
 
 class SQLiteHandler(DatabaseHandler):
     def __init__(self, connection: sqlite3.Connection) -> None:
         self.connection: sqlite3.Connection = connection
+        self.ensure_tables_exist()
+
+    def ensure_tables_exist(self) -> None:
+        """
+        Ensure that all required tables exist in the database.
+        Creates them if they don't exist.
+
+        Raises:
+            DatabaseError: If table creation fails
+        """
+        create_chats_table = """
+            CREATE TABLE IF NOT EXISTS chats (chat_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, model_type TEXT, model TEXT)
+            """
+        create_messages_table = """
+        CREATE TABLE IF NOT EXISTS messages (chat_id INT NOT NULL, message_id INT NOT NULL, role TEXT,message TEXT,PRIMARY KEY (chat_id, message_id));
+        """
+        try:
+            with self.connection:
+                cursor = self.connection.cursor()
+                cursor.execute(create_chats_table)
+                cursor.execute(create_messages_table)
+        except sqlite3.Error as e:
+            raise DatabaseError(f"Failed to initialize database: {str(e)}")
 
     def get_model_for_chat(self, chat_id: str) -> dict[str, str]:
         cursor = self.connection.cursor()
 
         cursor.execute(
-            "SELECT model_type, model,FROM chats WHERE chat_id = ?",
+            "SELECT model_type, model FROM chats WHERE chat_id = ?",
             (chat_id,),
         )
 
@@ -27,32 +50,20 @@ class SQLiteHandler(DatabaseHandler):
         cursor = self.connection.cursor()
 
         cursor.execute(
-            "CREATE TABLE IF NOT EXISTS chats (chat_id INTEGER PRIMARY KEY, name TEXT, model_type TEXT, model TEXT)"
+            "INSERT INTO chats (name, model_type, model) VALUES (?, ?, ?)",
+            ("Test Chat", model_type, model),
         )
-        self.connection.commit()
 
-        cursor.execute("SELECT MAX(chat_id) AS max_id FROM chats")
-
-        result = cursor.fetchone()
-
-        chat_id: int = result[0] + 1 if result[0] is not None else 0
-
-        cursor.execute(
-            "INSERT INTO chats (chat_id, name, model_type, model) VALUES (?, ?, ?, ?)",
-            (chat_id, "Test Chat", model_type, model),
-        )
+        chat_id = cursor.lastrowid
 
         self.connection.commit()
         cursor.close()
+        if chat_id is None:
+            raise DatabaseError("Failed to create new chat")
         return chat_id
 
     def add_message_to_chat(self, chat_id: int, role: str, message: str) -> None:
         cursor = self.connection.cursor()
-
-        cursor.execute(
-            "CREATE TABLE IF NOT EXISTS messages (chat_id INT NOT NULL, message_id INT NOT NULL, role TEXT,message TEXT,PRIMARY KEY (chat_id, message_id));"
-        )
-        self.connection.commit()
 
         cursor.execute(
             "SELECT MAX(message_id) AS max_id FROM messages WHERE chat_id = ?",

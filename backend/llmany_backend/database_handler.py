@@ -1,6 +1,12 @@
 from abc import ABC, abstractmethod
 
 
+class DatabaseError(Exception):
+    """Base exception for database-related errors."""
+
+    pass
+
+
 class DatabaseHandler(ABC):
     @abstractmethod
     def get_model_for_chat(self, id: str) -> dict[str, str]:
