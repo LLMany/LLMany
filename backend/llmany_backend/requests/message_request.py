@@ -48,8 +48,9 @@ class MessageRequest(Request):
 
     def execute(self) -> None:
         model: ModelHandler = self.model_handler.create_model_handler(self.model_type)
-        self.chat_history.append({"role": "user", "content": self.contents})
-        response: str = model.send_message(model=self.model, messages=self.chat_history)
+        response: str = model.send_message(
+            model=self.model, message=self.contents, history=self.chat_history
+        )
         self.database_handler.add_message_to_chat(self.chat_ID, "user", self.contents)
         self.database_handler.add_message_to_chat(self.chat_ID, "assistant", response)
         returned_value = {
