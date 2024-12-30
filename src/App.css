@@ -10,36 +10,18 @@ html, body, .App {
   padding-left: 8px;
 }
 
-.Sidebar {
-  flex: 1;
-  background: #31363F;
-  border-radius: 8px;
-  height: 100%;
-  padding: 4px;
-}
 
 .ChatBox {
-  flex: 3;
-  padding: 4px;
-  background: #31363F;
-  border-radius: 8px;
-  height: 100%;
+
 }
 
-.MainBox {
-  flex: 1;
-  display: flex;
-  flex-direction: row;
-  gap: 8px;
-  height: 500px;
-}
 
-.Placeholder {
-}
-
-.ChatBox {
+.Chat {
   display: flex;
   flex-direction: column-reverse;
+  height: 100%;
+  width: 100%;
+  gap: 4px;
 }
 
 .Input {
@@ -47,6 +29,22 @@ html, body, .App {
   flex-direction: row;
   width: 100%;
   gap: 4px;
+}
+
+.UserMessage {
+  border-radius: 8px;
+  background: green;
+  color: white;
+  padding: 4px;
+  float: right;
+}
+
+.ModelMessage {
+  border-radius: 8px;
+  background: gray;
+  color: white;
+  padding: 4px;
+  float: left;
 }
 
 .MessageInput {

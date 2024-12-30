@@ -1,94 +1,41 @@
 import './App.css';
-import {useState} from "react"
+import {useEffect, useState} from "react"
+import Header from "./components/Header";
+import MainContainer from "./components/MainContainer";
 
 function App() {
 
-    const [currentModel, changeModel] = useState(null);
+    const [currentModel, setCurrentModel] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [input, setInput] = useState("");
+    const [inputData, setInputData] = useState("");
     const [messages, setMessages] = useState([]);
 
+    useEffect(() => {
+        // Subscribe to Python messages
+        const cleanup = window.electronAPI.onPythonMessage((data) => {
+            setMessages(prev => [...prev, data]);
+        });
 
+        // Cleanup subscription on unmount
+        return cleanup;
+    }, []);
+
+    const handleSendData = async () => {
+        try {
+            const data = { message: inputData };
+            await window.electronAPI.sendToPython(data);
+            setInputData('');
+        } catch (error) {
+            console.error('Error sending data:', error);
+        }
+    };
 
     return (
         <div className="App">
                 <Header/>
-                <MainBox/>
+                <MainContainer/>
         </div>
     );
-}
-
-function Header() {
-    return (
-        <h3 className="Header">LLMany</h3>
-    )
-}
-
-function Sidebar() {
-    return (
-        <div className="Sidebar">
-            <ModelList/>
-            <HistoryList/>
-        </div>
-    )
-}
-
-function ModelList() {
-    return (
-        <div className="ModelList"></div>
-    )
-}
-
-function HistoryList() {
-    return (
-        <div className="HistoryList">
-            <PlaceHolder/>
-        </div>
-    )
-}
-
-function Chat() {
-
-
-    return (
-        <div className="Chat">
-        </div>
-    )
-}
-
-function MainBox() {
-    return (
-        <div className="MainBox">
-            <Sidebar/>
-            <ChatBox/>
-        </div>
-    )
-}
-
-
-function PlaceHolder() {
-    return (
-        <h5>Empty container</h5>
-    )
-}
-
-function ChatBox() {
-    return (
-        <div className="ChatBox">
-            <Chat/>
-            <Input/>
-        </div>
-    )
-}
-
-
-function Input() {
-    return (
-        <div className="Input">
-            <textarea className="MessageInput"></textarea>
-            <button className="SendButton">Send</button>
-        </div>
-    )
 }
 
 export default App;
