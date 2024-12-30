@@ -116,7 +116,7 @@ class SQLiteHandler(DatabaseHandler):
 
         return dict_result
 
-    def remove_chat(self, chat_id: str) -> None:
+    def remove_chat(self, chat_id: int) -> None:
         cursor = self.connection.cursor()
 
         cursor.execute("DELETE FROM chats WHERE chat_id = ?", (chat_id,))
