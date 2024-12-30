@@ -1,4 +1,5 @@
 import json
+import sqlite3
 from llmany_backend.database_handler import DatabaseHandler
 from llmany_backend.request import Request
 
@@ -13,7 +14,12 @@ class DeleteChatRequest(Request):
         return cls(database_handler, request["chat_id"])
 
     def execute(self) -> None:
-        status: bool = self.database_handler.remove_chat(self.chat_ID)
+        try:
+            self.database_handler.remove_chat(self.chat_ID)
+        except sqlite3.Error:
+            status = False
+        else:
+            status = True
         returned_value = {
             "type": "delete_chat",
             "chat_id": self.chat_ID,
