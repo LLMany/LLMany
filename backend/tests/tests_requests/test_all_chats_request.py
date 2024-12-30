@@ -34,7 +34,6 @@ def test_execute_all_chats_request():
     with patch("builtins.print") as mock_print:
         request.execute()
 
-        # Oczekiwany wynik w formacie JSON
         expected_output = json.dumps(
             {
                 "type": "all_chats",
