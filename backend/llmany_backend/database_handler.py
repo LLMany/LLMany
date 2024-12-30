@@ -29,5 +29,5 @@ class DatabaseHandler(ABC):
         pass
 
     @abstractmethod
-    def remove_chat(self, id: str) -> None:
+    def remove_chat(self, chat_id: int) -> None:
         pass
