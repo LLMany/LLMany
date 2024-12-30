@@ -6,34 +6,34 @@ from llmany_backend.database_handlers.sqlite_handler import SQLiteHandler
 
 
 @pytest.mark.parametrize(
-    "chat_id, model_type, model",
+    "model_type, model",
     [
-        (1, "OpenAI", "gpt-4o"),
-        (2, "Anthropic", "claude-3.5"),
-        (3, "OpenAI", "gpt-4"),
-        (4, "Anthropic", "claude-2.5"),
-        (5, "Google", "Gemini 1.5"),
+        ("OpenAI", "gpt-4o"),
+        ("Anthropic", "claude-3.5"),
+        ("OpenAI", "gpt-4"),
+        ("Anthropic", "claude-2.5"),
+        ("Google", "Gemini 1.5"),
     ],
 )
-def test_get_model_for_chat(chat_id, model_type, model, temp_file):
+def test_get_model_for_chat(model_type, model, temp_file):
     connection = sqlite3.connect(temp_file)
     cursor = connection.cursor()
+    handler = SQLiteHandler(connection)
+
     cursor.execute(
-        "CREATE TABLE IF NOT EXISTS chats (chat_id INTEGER PRIMARY KEY, name TEXT, model_type TEXT, model TEXT)"
+        "INSERT INTO chats (name, model_type, model) VALUES (?, ?, ?)",
+        ("Test Chat", model_type, model),
     )
+
+    chat_id = cursor.lastrowid
     connection.commit()
 
-    cursor.execute(
-        "INSERT INTO chats (chat_id, name, model_type, model) VALUES (?, ?, ?, ?)",
-        (chat_id, "Test Chat", model_type, model),
-    )
-    cursor.commit()
-
-    handler = SQLiteHandler(connection)
     result = handler.get_model_for_chat(chat_id)
 
-    assert isinstance(result, tuple)
-    returned_model_type, returned_model = result
+    assert isinstance(result, dict)
+
+    returned_model_type = result["model_type"]
+    returned_model = result["model"]
 
     assert returned_model_type == model_type
     assert returned_model == model
@@ -50,7 +50,7 @@ def test_get_model_for_chat(chat_id, model_type, model, temp_file):
         [
             ("Anthropic", "claude-2.5"),
             ("Google", "Gemini 1.5"),
-            ("Google, Gemini 1.5 "),
+            ("Google", "Gemini 1.5 "),
         ],
     ],
 )
@@ -72,7 +72,8 @@ def test_create_new_chat(model_list, temp_file):
 
         assert isinstance(chat_id, int)
 
-        returned_model_type, returned_model = result
+        returned_model_type = result["model_type"]
+        returned_model = result["model"]
 
         assert returned_model_type == model_type
         assert returned_model == model

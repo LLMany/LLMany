@@ -1,10 +1,15 @@
-from typing import Tuple, Dict
 from abc import ABC, abstractmethod
+
+
+class DatabaseError(Exception):
+    """Base exception for database-related errors."""
+
+    pass
 
 
 class DatabaseHandler(ABC):
     @abstractmethod
-    def get_model_for_chat(self, id: str) -> Tuple[str, str]:
+    def get_model_for_chat(self, id: str) -> dict[str, str]:
         pass
 
     @abstractmethod
@@ -20,7 +25,7 @@ class DatabaseHandler(ABC):
         pass
 
     @abstractmethod
-    def get_all_chats(self) -> Dict:
+    def get_all_chats(self) -> list[dict[str, str]]:
         pass
 
     @abstractmethod

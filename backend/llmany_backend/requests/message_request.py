@@ -31,7 +31,7 @@ class MessageRequest(Request):
         database_handler: DatabaseHandler,
         model_handler_factory: ModelHandlerFactory,
     ):
-        model_info: tuple[str, str] = database_handler.get_model_for_chat(
+        model_info: dict[str, str] = database_handler.get_model_for_chat(
             request["chat_id"]
         )
         chat_history = database_handler.get_chat_history(request["chat_id"])
@@ -39,8 +39,8 @@ class MessageRequest(Request):
         return cls(
             model_handler_factory,
             database_handler,
-            model_info[0],
-            model_info[1],
+            model_info["model_type"],
+            model_info["model"],
             request["chat_id"],
             chat_history,
             request["contents"],
