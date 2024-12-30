@@ -1,6 +1,6 @@
 import sqlite3
 import pytest
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 from llmany_backend.database_handlers.sqlite_handler import SQLiteHandler
 
@@ -83,38 +83,40 @@ def test_create_new_chat(model_list, temp_file):
 
 def test_sqlite_handler_initialization():
     mock_connection = MagicMock()
-
-    handler = SQLiteHandler(mock_connection)
-
-    assert handler.connection == mock_connection
+    with patch.object(SQLiteHandler, "ensure_tables_exist", return_value=None):
+        handler = SQLiteHandler(mock_connection)
+        assert handler.connection == mock_connection
+    mock_connection.cursor().execute.assert_not_called()
 
 
 def test_get_model_for_chat_mocked():
     mock_connection = MagicMock()
-    handler = SQLiteHandler(mock_connection)
+    with patch.object(SQLiteHandler, "ensure_tables_exist", return_value=None):
+        handler = SQLiteHandler(mock_connection)
 
-    mock_connection.execute.return_value = [("gpt-4", "chat-12345")]
+    mock_connection.cursor().fetchone.return_value = ("OpenAI", "gpt-4")
 
-    result = handler.get_model_for_chat("chat-12345")
+    result = handler.get_model_for_chat(123)
 
-    assert result == ("gpt-4", "chat-12345")
-    mock_connection.execute.assert_called_once_with(
-        "SELECT model, chat_id FROM chats WHERE chat_id = ?", ("chat-12345",)
+    assert result == {"model_type": "OpenAI", "model": "gpt-4"}
+    mock_connection.cursor().execute.assert_called_once_with(
+        "SELECT model_type, model FROM chats WHERE chat_id = ?", (123,)
     )
 
 
 def test_create_new_chat_mocked():
     mock_connection = MagicMock()
-    handler = SQLiteHandler(mock_connection)
+    with patch.object(SQLiteHandler, "ensure_tables_exist", return_value=None):
+        handler = SQLiteHandler(mock_connection)
 
-    mock_connection.execute.return_value = "new_chat_id"
+    mock_connection.cursor().lastrowid = 42
 
-    result = handler.create_new_chat()
+    result = handler.create_new_chat("OpenAI", "gpt-4")
 
-    assert result == "new_chat_id"
-    mock_connection.execute.assert_called_once_with(
-        "INSERT INTO chats (model, chat_id) VALUES (?, ?)",
-        ("default_model", "new_chat_id"),
+    assert result == 42
+    mock_connection.cursor().execute.assert_called_once_with(
+        "INSERT INTO chats (name, model_type, model) VALUES (?, ?, ?)",
+        ("Test Chat", "OpenAI", "gpt-4"),
     )
 
 
@@ -122,50 +124,68 @@ def test_add_message_to_chat():
     mock_connection = MagicMock()
     handler = SQLiteHandler(mock_connection)
 
-    handler.add_message_to_chat("chat-12345", "Hello, world!")
+    mock_cursor = mock_connection.cursor.return_value
+    mock_cursor.fetchone.return_value = (5,)
 
-    mock_connection.execute.assert_called_once_with(
-        "INSERT INTO messages (chat_id, message) VALUES (?, ?)",
-        ("chat-12345", "Hello, world!"),
+    handler.add_message_to_chat(1, "user", "Hello, world!")
+
+    mock_cursor.execute.assert_any_call(
+        "SELECT MAX(message_id) AS max_id FROM messages WHERE chat_id = ?",
+        (1,),
     )
+    mock_cursor.execute.assert_any_call(
+        "INSERT INTO messages (chat_id, message_id, role, message) VALUES (?, ?, ?, ?)",
+        (1, 6, "user", "Hello, world!"),
+    )
+    mock_connection.commit.assert_called_once()
 
 
 def test_get_chat_history():
     mock_connection = MagicMock()
-    handler = SQLiteHandler(mock_connection)
+    with patch.object(SQLiteHandler, "ensure_tables_exist", return_value=None):
+        handler = SQLiteHandler(mock_connection)
 
-    mock_connection.execute.return_value = [
-        {"message": "Hello, world!", "timestamp": "2024-11-29"}
-    ]
+    mock_connection.cursor().fetchall.return_value = [("user", "Hello!")]
 
-    result = handler.get_chat_history("chat-12345")
+    result = handler.get_chat_history(123)
 
-    assert result == [{"message": "Hello, world!", "timestamp": "2024-11-29"}]
-    mock_connection.execute.assert_called_once_with(
-        "SELECT message, timestamp FROM messages WHERE chat_id = ?", ("chat-12345",)
+    assert result == [{"role": "user", "content": "Hello!"}]
+    mock_connection.cursor().execute.assert_called_once_with(
+        "SELECT role, message FROM messages WHERE chat_id = ? ORDER BY message_id",
+        (123,),
     )
 
 
 def test_get_all_chats():
     mock_connection = MagicMock()
-    handler = SQLiteHandler(mock_connection)
+    with patch.object(SQLiteHandler, "ensure_tables_exist", return_value=None):
+        handler = SQLiteHandler(mock_connection)
 
-    mock_connection.execute.return_value = [{"chat_id": "chat-12345", "model": "gpt-4"}]
+    mock_connection.cursor().fetchall.return_value = [
+        (1, "OpenAI", "gpt-4"),
+        (2, "Anthropic", "claude-2"),
+    ]
 
     result = handler.get_all_chats()
 
-    assert result == [{"chat_id": "chat-12345", "model": "gpt-4"}]
-    mock_connection.execute.assert_called_once_with("SELECT chat_id, model FROM chats")
+    assert result == [
+        {"chat_id": 1, "model_type": "OpenAI", "model": "gpt-4"},
+        {"chat_id": 2, "model_type": "Anthropic", "model": "claude-2"},
+    ]
+    mock_connection.cursor().execute.assert_called_once_with(
+        "SELECT chat_id, model_type, model FROM chats"
+    )
 
 
 def test_remove_chat():
     mock_connection = MagicMock()
-    handler = SQLiteHandler(mock_connection)
+    with patch.object(SQLiteHandler, "ensure_tables_exist", return_value=None):
+        handler = SQLiteHandler(mock_connection)
 
-    handler.remove_chat("chat-12345")
+    handler.remove_chat(123)
 
-    mock_connection.execute.assert_called_once_with(
-        "DELETE FROM chats WHERE chat_id = ?", ("chat-12345",)
+    mock_connection.cursor().execute.assert_called_once_with(
+        "DELETE FROM chats WHERE chat_id = ?", (123,)
     )
 
 
