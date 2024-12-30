@@ -1,4 +1,5 @@
 import sqlite3
+from typing import Optional
 
 from llmany_backend.database_handler import DatabaseHandler, DatabaseError
 
@@ -22,11 +23,16 @@ class SQLiteHandler(DatabaseHandler):
         create_messages_table = """
         CREATE TABLE IF NOT EXISTS messages (chat_id INT NOT NULL, message_id INT NOT NULL, role TEXT,message TEXT,PRIMARY KEY (chat_id, message_id));
         """
+        create_api_keys_table = """
+        CREATE TABLE IF NOT EXISTS api_keys (model_type TEXT PRIMARY KEY, api_key TEXT)
+        """
+
         try:
             with self.connection:
                 cursor = self.connection.cursor()
                 cursor.execute(create_chats_table)
                 cursor.execute(create_messages_table)
+                cursor.execute(create_api_keys_table)
         except sqlite3.Error as e:
             raise DatabaseError(f"Failed to initialize database: {str(e)}")
 
@@ -58,6 +64,7 @@ class SQLiteHandler(DatabaseHandler):
 
         self.connection.commit()
         cursor.close()
+
         if chat_id is None:
             raise DatabaseError("Failed to create new chat")
         return chat_id
@@ -93,6 +100,7 @@ class SQLiteHandler(DatabaseHandler):
         result = cursor.fetchall()
 
         cursor.close()
+        self.connection.commit()
 
         dict_result = [{"role": role, "content": content} for role, content in result]
 
@@ -108,6 +116,7 @@ class SQLiteHandler(DatabaseHandler):
         result = cursor.fetchall()
 
         cursor.close()
+        self.connection.commit()
 
         dict_result = [
             {"chat_id": chat_id, "model_type": model_type, "model": model}
@@ -116,9 +125,34 @@ class SQLiteHandler(DatabaseHandler):
 
         return dict_result
 
-    def remove_chat(self, chat_id: str) -> None:
+    def remove_chat(self, chat_id: int) -> None:
         cursor = self.connection.cursor()
 
         cursor.execute("DELETE FROM chats WHERE chat_id = ?", (chat_id,))
 
         cursor.close()
+        self.connection.commit()
+
+    def add_api_key(self, model_type: str, api_key: str) -> None:
+        cursor = self.connection.cursor()
+        cursor.execute(
+            "INSERT INTO api_keys (model_type, api_key) VALUES (?, ?)",
+            (model_type, api_key),
+        )
+        cursor.close()
+        self.connection.commit()
+
+    def remove_api_key(self, model_type: str) -> None:
+        cursor = self.connection.cursor()
+        cursor.execute("DELETE FROM api_keys WHERE model_type = ?", (model_type,))
+        cursor.close()
+        self.connection.commit()
+
+    def get_api_key(self, model_type: str) -> Optional[str]:
+        cursor = self.connection.cursor()
+        cursor.execute(
+            "SELECT api_key FROM api_keys WHERE model_type = ?", (model_type,)
+        )
+        result = cursor.fetchone()
+        cursor.close()
+        return result[0] if result else None

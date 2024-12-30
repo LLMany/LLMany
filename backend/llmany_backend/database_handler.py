@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Optional
 
 
 class DatabaseError(Exception):
@@ -29,5 +30,17 @@ class DatabaseHandler(ABC):
         pass
 
     @abstractmethod
-    def remove_chat(self, id: str) -> None:
+    def remove_chat(self, chat_id: int) -> None:
+        pass
+
+    @abstractmethod
+    def add_api_key(self, model_type: str, api_key: str) -> None:
+        pass
+
+    @abstractmethod
+    def remove_api_key(self, model_type: str) -> None:
+        pass
+
+    @abstractmethod
+    def get_api_key(self, model_type: str) -> Optional[str]:
         pass

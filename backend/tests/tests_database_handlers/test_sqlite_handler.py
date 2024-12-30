@@ -187,3 +187,20 @@ def test_remove_chat():
     mock_connection.cursor().execute.assert_called_once_with(
         "DELETE FROM chats WHERE chat_id = ?", (123,)
     )
+
+
+def test_add_api_key(temp_file):
+    conn = sqlite3.connect(temp_file)
+    handler = SQLiteHandler(conn)
+    handler.add_api_key("gpt-4", "your-api-key")
+
+    assert handler.get_api_key("gpt-4") == "your-api-key"
+
+
+def test_remove_api_key(temp_file):
+    conn = sqlite3.connect(temp_file)
+    handler = SQLiteHandler(conn)
+    handler.add_api_key("gpt-4", "your-api-key")
+    handler.remove_api_key("gpt-4")
+
+    assert handler.get_api_key("gpt-4") is None
