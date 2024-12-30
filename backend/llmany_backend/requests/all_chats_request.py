@@ -1,3 +1,4 @@
+import json
 from llmany_backend.database_handler import DatabaseHandler
 from llmany_backend.request import Request
 
@@ -8,7 +9,9 @@ class AllChatsRequest(Request):
 
     @classmethod
     def from_dict(cls, request: dict, database_handler: DatabaseHandler):
-        raise NotImplementedError
+        return cls(database_handler)
 
     def execute(self) -> None:
-        raise NotImplementedError
+        all_chats: list[dict[str, str]] = self.database_handler.get_all_chats()
+        returned_value = {"type": "all_chats", "chats": all_chats}
+        print(json.dumps(returned_value))
