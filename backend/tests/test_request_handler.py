@@ -1,7 +1,5 @@
 import pytest
 from sqlite3 import connect
-import sys
-import io
 
 from llmany_backend.request_handler import RequestHandler
 from llmany_backend.database_handler_factory import DatabaseHandlerFactory
@@ -46,14 +44,13 @@ from llmany_backend.requests import (
     ],
 )
 def test_parse(request_string, expected_dict, temp_file, monkeypatch):
-    monkeypatch.setattr(sys, "stdin", io.StringIO(request_string))
     handler = RequestHandler(
         database_handler_factory=DatabaseHandlerFactory(),
         model_handler_factory=ModelHandlerFactory(),
         connection=connect(temp_file),
     )
 
-    request_data = handler.parse()
+    request_data = handler.parse(request_json=request_string)
     assert request_data == expected_dict
 
 

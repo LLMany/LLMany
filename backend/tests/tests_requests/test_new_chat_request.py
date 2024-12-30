@@ -9,12 +9,12 @@ def test_new_chat_request_init():
     mock_database_handler = MagicMock(DatabaseHandler)
 
     request = NewChatRequest(
-        database_handler=mock_database_handler, model_type="gpt-3", model="gpt-4"
+        database_handler=mock_database_handler, model_type="gpt-3", model="openai"
     )
 
     assert request.database_handler == mock_database_handler
     assert request.model_type == "gpt-3"
-    assert request.model == "gpt-4"
+    assert request.model == "openai"
 
 
 def test_new_chat_request_from_dict():
@@ -34,7 +34,7 @@ def test_execute_new_chat_request(mocker):
     mock_database_handler.create_new_chat.return_value = 123
 
     request = NewChatRequest(
-        database_handler=mock_database_handler, model_type="gpt-3", model="gpt-4"
+        database_handler=mock_database_handler, model_type="gpt-3", model="openai"
     )
 
     mocker.patch("builtins.print")

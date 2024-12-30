@@ -1,46 +1,76 @@
-from typing import Tuple, Dict
 import sqlite3
+from typing import Optional
 
-from llmany_backend.database_handler import DatabaseHandler
+from llmany_backend.database_handler import DatabaseHandler, DatabaseError
 
 
 class SQLiteHandler(DatabaseHandler):
     def __init__(self, connection: sqlite3.Connection) -> None:
         self.connection: sqlite3.Connection = connection
+        self.ensure_tables_exist()
 
-    def get_model_for_chat(self, id: str) -> Tuple[str, str]:
-        raise NotImplementedError
+    def ensure_tables_exist(self) -> None:
+        """
+        Ensure that all required tables exist in the database.
+        Creates them if they don't exist.
+
+        Raises:
+            DatabaseError: If table creation fails
+        """
+        create_chats_table = """
+            CREATE TABLE IF NOT EXISTS chats (chat_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, model_type TEXT, model TEXT)
+            """
+        create_messages_table = """
+        CREATE TABLE IF NOT EXISTS messages (chat_id INT NOT NULL, message_id INT NOT NULL, role TEXT,message TEXT,PRIMARY KEY (chat_id, message_id));
+        """
+        create_api_keys_table = """
+        CREATE TABLE IF NOT EXISTS api_keys (model_type TEXT PRIMARY KEY, api_key TEXT)
+        """
+
+        try:
+            with self.connection:
+                cursor = self.connection.cursor()
+                cursor.execute(create_chats_table)
+                cursor.execute(create_messages_table)
+                cursor.execute(create_api_keys_table)
+        except sqlite3.Error as e:
+            raise DatabaseError(f"Failed to initialize database: {str(e)}")
+
+    def get_model_for_chat(self, chat_id: str) -> dict[str, str]:
+        cursor = self.connection.cursor()
+
+        cursor.execute(
+            "SELECT model_type, model FROM chats WHERE chat_id = ?",
+            (chat_id,),
+        )
+
+        result = cursor.fetchone()
+
+        cursor.close()
+
+        dict_result = {"model_type": result[0], "model": result[1]}
+
+        return dict_result
 
     def create_new_chat(self, model_type: str, model: str) -> int:
         cursor = self.connection.cursor()
 
         cursor.execute(
-            "CREATE TABLE IF NOT EXISTS chats (chat_id INTEGER PRIMARY KEY, name TEXT, model_type TEXT, model TEXT)"
+            "INSERT INTO chats (name, model_type, model) VALUES (?, ?, ?)",
+            ("Test Chat", model_type, model),
         )
-        self.connection.commit()
 
-        cursor.execute("SELECT MAX(chat_id) AS max_id FROM chats")
-
-        result = cursor.fetchone()
-
-        chat_id: int = result[0] + 1 if result[0] is not None else 0
-
-        cursor.execute(
-            "INSERT INTO chats (chat_id, name, model_type, model) VALUES (?, ?, ?, ?)",
-            (chat_id, "Test Chat", model_type, model),
-        )
+        chat_id = cursor.lastrowid
 
         self.connection.commit()
         cursor.close()
+
+        if chat_id is None:
+            raise DatabaseError("Failed to create new chat")
         return chat_id
 
     def add_message_to_chat(self, chat_id: int, role: str, message: str) -> None:
         cursor = self.connection.cursor()
-
-        cursor.execute(
-            "CREATE TABLE IF NOT EXISTS messages (chat_id INT NOT NULL, message_id INT NOT NULL, role TEXT,message TEXT,PRIMARY KEY (chat_id, message_id));"
-        )
-        self.connection.commit()
 
         cursor.execute(
             "SELECT MAX(message_id) AS max_id FROM messages WHERE chat_id = ?",
@@ -59,7 +89,7 @@ class SQLiteHandler(DatabaseHandler):
         self.connection.commit()
         cursor.close()
 
-    def get_chat_history(self, chat_id: int) -> list[tuple]:
+    def get_chat_history(self, chat_id: int) -> list[dict[str, str]]:
         cursor = self.connection.cursor()
 
         cursor.execute(
@@ -70,11 +100,59 @@ class SQLiteHandler(DatabaseHandler):
         result = cursor.fetchall()
 
         cursor.close()
+        self.connection.commit()
 
-        return result
+        dict_result = [{"role": role, "content": content} for role, content in result]
 
-    def get_all_chats(self) -> Dict:
-        raise NotImplementedError
+        return dict_result
 
-    def remove_chat(self, id: str) -> None:
-        raise NotImplementedError
+    def get_all_chats(self) -> list[dict[str, str]]:
+        cursor = self.connection.cursor()
+
+        cursor.execute(
+            "SELECT chat_id, model_type, model FROM chats",
+        )
+
+        result = cursor.fetchall()
+
+        cursor.close()
+        self.connection.commit()
+
+        dict_result = [
+            {"chat_id": chat_id, "model_type": model_type, "model": model}
+            for chat_id, model_type, model in result
+        ]
+
+        return dict_result
+
+    def remove_chat(self, chat_id: int) -> None:
+        cursor = self.connection.cursor()
+
+        cursor.execute("DELETE FROM chats WHERE chat_id = ?", (chat_id,))
+
+        cursor.close()
+        self.connection.commit()
+
+    def add_api_key(self, model_type: str, api_key: str) -> None:
+        cursor = self.connection.cursor()
+        cursor.execute(
+            "INSERT INTO api_keys (model_type, api_key) VALUES (?, ?)",
+            (model_type, api_key),
+        )
+        cursor.close()
+        self.connection.commit()
+
+    def remove_api_key(self, model_type: str) -> None:
+        cursor = self.connection.cursor()
+        cursor.execute("DELETE FROM api_keys WHERE model_type = ?", (model_type,))
+        cursor.close()
+        self.connection.commit()
+
+    def get_api_key(self, model_type: str) -> Optional[str]:
+        cursor = self.connection.cursor()
+        cursor.execute(
+            "SELECT api_key FROM api_keys WHERE model_type = ?", (model_type,)
+        )
+        result = cursor.fetchone()
+        cursor.close()
+        return result[0] if result else None

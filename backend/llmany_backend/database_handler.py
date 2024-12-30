@@ -1,10 +1,16 @@
-from typing import Tuple, Dict
 from abc import ABC, abstractmethod
+from typing import Optional
+
+
+class DatabaseError(Exception):
+    """Base exception for database-related errors."""
+
+    pass
 
 
 class DatabaseHandler(ABC):
     @abstractmethod
-    def get_model_for_chat(self, id: str) -> Tuple[str, str]:
+    def get_model_for_chat(self, id: str) -> dict[str, str]:
         pass
 
     @abstractmethod
@@ -16,13 +22,25 @@ class DatabaseHandler(ABC):
         pass
 
     @abstractmethod
-    def get_chat_history(self, chat_id: int) -> list[tuple]:
+    def get_chat_history(self, chat_id: int) -> list[dict[str, str]]:
         pass
 
     @abstractmethod
-    def get_all_chats(self) -> Dict:
+    def get_all_chats(self) -> list[dict[str, str]]:
         pass
 
     @abstractmethod
-    def remove_chat(self, id: str) -> None:
+    def remove_chat(self, chat_id: int) -> None:
+        pass
+
+    @abstractmethod
+    def add_api_key(self, model_type: str, api_key: str) -> None:
+        pass
+
+    @abstractmethod
+    def remove_api_key(self, model_type: str) -> None:
+        pass
+
+    @abstractmethod
+    def get_api_key(self, model_type: str) -> Optional[str]:
         pass
