@@ -27,7 +27,7 @@ def test_message_request_initialization():
         contents,
     )
 
-    assert request.model_handler == mock_model_handler
+    assert request.model_handler_factory == mock_model_handler
     assert request.database_handler == mock_database_handler
     assert request.model_type == model_type
     assert request.model == model
