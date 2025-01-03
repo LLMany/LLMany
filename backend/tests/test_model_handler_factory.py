@@ -16,5 +16,5 @@ from llmany_backend.model_handlers.openai_handler import OpenAIHandler
 )
 def test_proper_handler_created(model_type, model_handler_class):
     factory = ModelHandlerFactory()
-    handler = factory.create_model_handler(model_type)
+    handler = factory.create_model_handler(model_type, "API-key")
     assert isinstance(handler, model_handler_class)
