@@ -27,7 +27,7 @@ def test_message_request_initialization():
         contents,
     )
 
-    assert request.model_handler == mock_model_handler
+    assert request.model_handler_factory == mock_model_handler
     assert request.database_handler == mock_database_handler
     assert request.model_type == model_type
     assert request.model == model
@@ -42,7 +42,11 @@ def test_message_request_from_dict():
 
     request_data = {"chat_id": 12345, "contents": "Hello!"}
 
-    mock_database_handler.get_model_for_chat.return_value = ("gpt-4", "openai")
+    mock_database_handler.get_model_for_chat.return_value = {
+        "model_type": "gpt-4",
+        "model": "openai",
+    }
+
     mock_database_handler.get_chat_history.return_value = [
         {"role": "user", "content": "Hello there"},
         {"role": "assistant", "content": "General Kenobi"},

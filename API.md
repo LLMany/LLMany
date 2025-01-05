@@ -94,3 +94,43 @@ Returned value:
 }
 
 ```
+## Add API key request
+Request:
+```
+{"type": "add_api_key",
+"model_type": the type/provider of the model, for which the api is to be used
+"api_key": the api key to add
+}
+```
+Returned value:
+None
+
+## Remove API key request
+Request:
+```
+{
+"type": "remove_api_key",
+"model_type": the type/provider of the model, for which the api is to be removed
+}
+```
+Returned value:
+None
+
+
+## Check if API key exists request
+Request:
+```
+{
+"type": "check_api_key",
+"model_type": the type/provider of the model, for which the existance of the api key is to be checked
+}
+```
+Returned value:
+None
+```
+{
+"type": "check_api_key",
+"model_type": the type/provider of the model, for which the existance of the api key is to be checked
+"exists": True/False
+}
+```
