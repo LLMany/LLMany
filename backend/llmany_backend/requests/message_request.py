@@ -16,7 +16,7 @@ class MessageRequest(Request):
         chat_history: list[dict[str, str]],
         contents: str,
     ) -> None:
-        self.model_handler: ModelHandlerFactory = model_handler
+        self.model_handler_factory: ModelHandlerFactory = model_handler
         self.database_handler: DatabaseHandler = database_handler
         self.model_type: str = model_type
         self.model: str = model
@@ -47,14 +47,30 @@ class MessageRequest(Request):
         )
 
     def execute(self) -> None:
-        model: ModelHandler = self.model_handler.create_model_handler(self.model_type)
-        self.chat_history.append({"role": "user", "content": self.contents})
-        response: str = model.send_message(model=self.model, messages=self.chat_history)
-        self.database_handler.add_message_to_chat(self.chat_ID, "user", self.contents)
-        self.database_handler.add_message_to_chat(self.chat_ID, "assistant", response)
-        returned_value = {
-            "type": "message",
-            "chat_id": self.chat_ID,
-            "content": response,
-        }
+        api_key = self.database_handler.get_api_key(self.model_type)
+        if api_key is None:
+            returned_value = {
+                "type": "message",
+                "chat_id": self.chat_ID,
+                "content": "No API key provided for the model type: {self.model_type}",
+            }
+        else:
+            model: ModelHandler = self.model_handler_factory.create_model_handler(
+                self.model_type, api_key
+            )
+            self.chat_history.append({"role": "user", "content": self.contents})
+            response: str = model.send_message(
+                model=self.model, messages=self.chat_history
+            )
+            self.database_handler.add_message_to_chat(
+                self.chat_ID, "user", self.contents
+            )
+            self.database_handler.add_message_to_chat(
+                self.chat_ID, "assistant", response
+            )
+            returned_value = {
+                "type": "message",
+                "chat_id": self.chat_ID,
+                "content": response,
+            }
         print(json.dumps(returned_value))

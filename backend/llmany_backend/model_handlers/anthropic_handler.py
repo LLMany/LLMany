@@ -2,6 +2,9 @@ from llmany_backend.model_handler import ModelHandler
 
 
 class AnthropicHandler(ModelHandler):
+    def __init__(self, api_key: str):
+        self.api_key = api_key
+
     def send_message(self, model: str, messages: list[dict[str, str]]) -> str:
         raise NotImplementedError
 
