@@ -1,5 +1,5 @@
 from llmany_backend.database_handler import DatabaseHandler
-from llmany_backend.requests.check_api_key_request import CheckApiKeyRequest
+from llmany_backend.llmany_requests.check_api_key_request import CheckApiKeyRequest
 from unittest.mock import MagicMock, patch
 import json
 
