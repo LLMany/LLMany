@@ -1,40 +1,41 @@
 import './App.css';
-import {useEffect, useState} from "react"
+import React, {useEffect, useState} from "react"
 import Header from "./components/Header";
 import MainContainer from "./components/MainContainer";
+import {DEFAULT_MODEL, EMPTY_CHAT, EMPTY_INPUT} from "./utils/constants";
+import {handleSendData} from "./communication/requestHandlers";
+import {allChatsRequest, chatHistoryRequest} from "./communication/requestCreators";
+
+export const Context = React.createContext();
 
 function App() {
 
-    const [currentModel, setCurrentModel] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [inputData, setInputData] = useState("");
-    const [messages, setMessages] = useState([]);
+    const [currentModel, setCurrentModel] = useState(DEFAULT_MODEL);
+    const [currentChatID, setCurrentChatID] = useState(EMPTY_CHAT);
 
     useEffect(() => {
-        // Subscribe to Python messages
-        const cleanup = window.electronAPI.onPythonMessage((data) => {
-            setMessages(prev => [...prev, data]);
-        });
 
-        // Cleanup subscription on unmount
-        return cleanup;
+        handleSendData(allChatsRequest()).then(data => {console.log(data)})
+
+        // return window.electronAPI.onPythonMessage((data) => {
+        //     setMessages(prev => [...prev, data]);
+        // });
     }, []);
 
-    const handleSendData = async () => {
-        try {
-            const data = { message: inputData };
-            await window.electronAPI.sendToPython(data);
-            setInputData('');
-        } catch (error) {
-            console.error('Error sending data:', error);
-        }
-    };
+
 
     return (
-        <div className="App">
-                <Header/>
-                <MainContainer/>
-        </div>
+        <Context.Provider
+            value={{
+                model: [currentModel, setCurrentModel],
+                chatID: [currentChatID, setCurrentChatID],
+            }}
+            className="App"
+        >
+            <Header/>
+            <MainContainer/>
+        </Context.Provider>
+
     );
 }
 

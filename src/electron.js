@@ -1,5 +1,5 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
-const {join, sep, resolve} = require("node:path");
+const {app, BrowserWindow, ipcMain} = require('electron');
+const {sep, resolve, join} = require("node:path");
 const {spawn} = require("child_process");
 
 let mainWindow;
@@ -11,6 +11,7 @@ function createWindow() {
         height: 600,
         webPreferences: {
             nodeIntegration: true,
+            preload: join(__dirname, 'preload'),
         },
     });
 
@@ -23,7 +24,6 @@ function createWindow() {
     startPythonBackend();
 }
 
-app.on('ready', createWindow);
 
 app.on('activate', () => {
     if (mainWindow === null) {
@@ -35,7 +35,7 @@ function startPythonBackend() {
     const dir = resolve(__dirname, '..');
     const scriptPath = join(dir, 'backend', 'llmany_backend', 'main.py');
 
-    process.chdir('backend')
+    process.chdir('backend');
     pythonProcess = spawn('poetry', ['run', 'python', scriptPath]);
     process.chdir('..')
 
@@ -78,11 +78,5 @@ app.on('window-all-closed', () => {
     }
     if (process.platform !== 'darwin') {
         app.quit();
-    }
-});
-
-app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-        createWindow();
     }
 });

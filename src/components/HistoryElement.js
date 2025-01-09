@@ -1,11 +1,8 @@
-import {modelMap} from "../utils/values";
 import {useState} from "react";
 
-function ModelElement({modelName, selected, onClick}) {
+function HistoryElement({chatID, selected, onClick}) {
 
     const [mouseOver, setMouseOver] = useState(false);
-    const displayName = modelMap[modelName].displayName;
-
 
     return (
         <div
@@ -22,11 +19,9 @@ function ModelElement({modelName, selected, onClick}) {
             onMouseOver={() => setMouseOver(true)}
             onMouseLeave={() => setMouseOver(false)}
         >
-            {displayName}
-            <br/>
-            {selected ? <> chat key... </> : <> </>}
+            {chatID}
         </div>
     )
 }
 
-export default ModelElement;
+export default HistoryElement;

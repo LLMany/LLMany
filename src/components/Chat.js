@@ -1,11 +1,29 @@
 import ModelMessage from "./message/ModelMessage";
 import UserMessage from "./message/UserMessage";
+import {USER_MESSAGE} from "../utils/constants";
 
-function Chat() {
+function Chat({messages}) {
+
+
     return (
-        <div className="Chat">
-            <ModelMessage message="No siema" />
-            <UserMessage message="Hello World!" />
+        <div
+            style={{
+                overflowY: "scroll",
+                padding: "4px",
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100%',
+                width: '100%',
+                gap: '4px',
+            }}
+        >
+            {
+                messages.map(({owner, content}) => (
+                    owner === USER_MESSAGE ?
+                        <UserMessage message={content}/> :
+                        <ModelMessage message={content}/>
+                ))
+            }
         </div>
     )
 }

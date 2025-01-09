@@ -6,23 +6,6 @@ html, body, .App {
   padding-right: 4px;
 }
 
-.Header {
-  padding-left: 8px;
-}
-
-
-.ChatBox {
-
-}
-
-
-.Chat {
-  display: flex;
-  flex-direction: column-reverse;
-  height: 100%;
-  width: 100%;
-  gap: 4px;
-}
 
 .Input {
   display: flex;

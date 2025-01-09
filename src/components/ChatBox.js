@@ -1,7 +1,38 @@
 import Chat from "./Chat";
 import Input from "./Input";
+import {useContext, useState} from "react";
+import {Context} from "../App";
+import {EMPTY_CHAT, EMPTY_INPUT, MODEL_MESSAGE, USER_MESSAGE} from "../utils/constants";
+import {placeholderMessages} from "../utils/placeholderData";
+import EmptyChat from "./EmptyChat";
+
 
 function ChatBox() {
+
+    const {model, chatID} = useContext(Context);
+
+    const [currentModel, setCurrentModel] = model;
+    const [currentChatID, setCurrentChatID] = chatID;
+    const [messages, setMessages] = useState(placeholderMessages);
+
+    // Send OnClick function to children for sending messages and fetching response
+    const onSendMessage = (message) => {
+        if (message === EMPTY_INPUT) {
+            return;
+        }
+        if (currentChatID === EMPTY_CHAT) {
+            // setCurrentChatID(handleSendData(newChatRequest(currentModelProvider, currentModel)));
+            setCurrentChatID(1000);
+            // Add chat to history
+        }
+        const newUserMessage = {owner: USER_MESSAGE, content: message};
+        const modelResponse = {owner: MODEL_MESSAGE, content: "Response"};
+        // handleSendData(messageRequest(currentChatID, inputData));
+        setMessages(prevState =>
+            [...prevState, newUserMessage, modelResponse] );
+
+    }
+
     return (
         <div style={{
             flex: 3,
@@ -13,8 +44,11 @@ function ChatBox() {
             gap: '8px',
             flexDirection: 'column',
         }}>
-            <Chat/>
-            <Input/>
+            { currentChatID === EMPTY_CHAT ?
+                <EmptyChat />  :
+                <Chat messages={messages} />
+            }
+            <Input onSubmit={onSendMessage} />
         </div>
     )
 }

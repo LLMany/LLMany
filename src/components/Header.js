@@ -1,6 +1,12 @@
 function Header() {
     return (
-        <h3 className="Header">LLMany</h3>
+        <h3
+            style={{
+                paddingLeft: '8px',
+            }}
+        >
+            LLMany
+        </h3>
     )
 }
 
