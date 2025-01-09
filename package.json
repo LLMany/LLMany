@@ -7,6 +7,7 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "concurrently": "^9.1.0",
     "electron-squirrel-startup": "^1.0.1",
     "eslint": "^9.16.0",
     "eslint-config-prettier": "^9.1.0",
@@ -15,11 +16,12 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-scripts": "5.0.1",
+    "wait-on": "^8.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "react-start": "BROWSER=NONE react-scripts start",
-    "electron-start": "DEV=1 electron .",
+    "react-start": "cross-env BROWSER=NONE react-scripts start",
+    "electron-start": "cross-env DEV=1 electron .",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
@@ -27,13 +29,8 @@
     "package": "electron-forge package",
     "make": "electron-forge make"
   },
-  "main": "electron.js",
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
+  "main": "./src/electron.js",
+  "eslintConfig": {},
   "browserslist": {
     "production": [
       ">0.2%",
@@ -47,6 +44,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/core": "^7.26.0",
     "@electron-forge/cli": "^7.5.0",
     "@electron-forge/maker-deb": "^7.5.0",
     "@electron-forge/maker-rpm": "^7.5.0",
@@ -55,6 +53,7 @@
     "@electron-forge/plugin-auto-unpack-natives": "^7.5.0",
     "@electron-forge/plugin-fuses": "^7.5.0",
     "@electron/fuses": "^1.8.0",
+    "cross-env": "^7.0.3",
     "electron": "^33.2.0",
     "eslint-plugin-react-hooks": "^5.0.0",
     "prettier": "^3.4.2"
