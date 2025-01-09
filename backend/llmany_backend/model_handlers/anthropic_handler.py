@@ -5,7 +5,9 @@ class AnthropicHandler(ModelHandler):
     def __init__(self, api_key: str):
         self.api_key = api_key
 
-    def send_message(self, model: str, messages: list[dict[str, str]]) -> str:
+    def send_message(
+        self, model: str, message: str, history: list[dict[str, str]]
+    ) -> str:
         raise NotImplementedError
 
     def parse_message(self) -> str:
