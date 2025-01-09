@@ -2,7 +2,7 @@ import json
 import sqlite3
 from unittest.mock import MagicMock
 from llmany_backend.database_handler import DatabaseHandler
-from llmany_backend.requests.delete_chat_request import DeleteChatRequest
+from llmany_backend.llmany_requests.delete_chat_request import DeleteChatRequest
 
 
 def test_delete_chat_request_initialization():

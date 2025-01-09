@@ -1,25 +1,42 @@
-import logo from './logo.svg';
 import './App.css';
+import React, {useEffect, useState} from "react"
+import Header from "./components/Header";
+import MainContainer from "./components/MainContainer";
+import {DEFAULT_MODEL, EMPTY_CHAT, EMPTY_INPUT} from "./utils/constants";
+import {handleSendData} from "./communication/requestHandlers";
+import {allChatsRequest, chatHistoryRequest} from "./communication/requestCreators";
+
+export const Context = React.createContext();
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+
+    const [currentModel, setCurrentModel] = useState(DEFAULT_MODEL);
+    const [currentChatID, setCurrentChatID] = useState(EMPTY_CHAT);
+
+    useEffect(() => {
+
+        handleSendData(allChatsRequest()).then(data => {console.log(data)})
+
+        // return window.electronAPI.onPythonMessage((data) => {
+        //     setMessages(prev => [...prev, data]);
+        // });
+    }, []);
+
+
+
+    return (
+        <Context.Provider
+            value={{
+                model: [currentModel, setCurrentModel],
+                chatID: [currentChatID, setCurrentChatID],
+            }}
+            className="App"
         >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+            <Header/>
+            <MainContainer/>
+        </Context.Provider>
+
+    );
 }
 
 export default App;

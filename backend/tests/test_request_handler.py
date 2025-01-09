@@ -5,7 +5,7 @@ from llmany_backend.request_handler import RequestHandler
 from llmany_backend.database_handler_factory import DatabaseHandlerFactory
 from llmany_backend.model_handler_factory import ModelHandlerFactory
 from llmany_backend.database_handler import DatabaseHandler
-from llmany_backend.requests import (
+from llmany_backend.llmany_requests import (
     AllChatsRequest,
     DeleteChatRequest,
     ChatHistoryRequest,

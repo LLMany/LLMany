@@ -4,7 +4,7 @@ from sqlite3 import Connection
 from llmany_backend.database_handler_factory import DatabaseHandlerFactory
 from llmany_backend.model_handler_factory import ModelHandlerFactory
 from llmany_backend.request import Request
-from llmany_backend.requests import (
+from llmany_backend.llmany_requests import (
     AllChatsRequest,
     ChatHistoryRequest,
     DeleteChatRequest,
