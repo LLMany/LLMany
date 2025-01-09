@@ -60,7 +60,7 @@ class MessageRequest(Request):
             )
             self.chat_history.append({"role": "user", "content": self.contents})
             response: str = model.send_message(
-                model=self.model, messages=self.chat_history
+                model=self.model, message=self.contents, history=self.chat_history
             )
             self.database_handler.add_message_to_chat(
                 self.chat_ID, "user", self.contents

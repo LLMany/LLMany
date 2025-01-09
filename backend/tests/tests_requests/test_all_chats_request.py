@@ -1,7 +1,7 @@
 import json
 from unittest.mock import MagicMock, patch
 from llmany_backend.database_handler import DatabaseHandler
-from llmany_backend.requests.all_chats_request import AllChatsRequest
+from llmany_backend.llmany_requests.all_chats_request import AllChatsRequest
 
 
 def test_all_chats_request_initialization():

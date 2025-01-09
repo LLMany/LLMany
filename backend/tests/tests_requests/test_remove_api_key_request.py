@@ -1,5 +1,5 @@
 from llmany_backend.database_handler import DatabaseHandler
-from llmany_backend.requests.remove_api_key_request import RemoveApiKeyRequest
+from llmany_backend.llmany_requests.remove_api_key_request import RemoveApiKeyRequest
 from unittest.mock import MagicMock
 
 

@@ -1,6 +1,6 @@
 from llmany_backend.database_handler import DatabaseHandler
 from llmany_backend.model_handler_factory import ModelHandlerFactory
-from llmany_backend.requests.message_request import MessageRequest
+from llmany_backend.llmany_requests.message_request import MessageRequest
 from unittest.mock import MagicMock, patch
 
 
