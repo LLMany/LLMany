@@ -1,7 +1,7 @@
 import json
 import sqlite3
 from llmany_backend.database_handler import DatabaseHandler
-from llmany_backend.request import Request
+from llmany_backend.llmany_request import Request
 
 
 class DeleteChatRequest(Request):
