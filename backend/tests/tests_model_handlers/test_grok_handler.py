@@ -1,5 +1,5 @@
 from unittest.mock import MagicMock
-from backend.llmany_backend.model_handlers.grok_handler import GrokHandler
+from llmany_backend.model_handlers.grok_handler import GrokHandler
 
 
 def test_send_message(mocker):
@@ -11,17 +11,16 @@ def test_send_message(mocker):
     )
 
     mocker.patch(
-        "llmany_backend.model_handlers.grok_handler.GrokHandler",
+        "llmany_backend.model_handlers.grok_handler.OpenAI",
         return_value=mock_openai_instance,
     )
 
-    handler = GrokHandler(api_key="fake_api_key")
+    handler = GrokHandler(api_key="dummy_api_key")
 
-    response = handler.send_message(model="gpt-4", message="Hello", history=[])
+    response = handler.send_message(model="grok-beta", message="Hello", history=[])
 
-    # Assertions
     assert response == "Hello, this is Grok!"
     mock_openai_instance.chat.completions.create.assert_called_once_with(
-        model="gpt-4",
+        model="grok-beta",
         messages=[{"role": "user", "content": "Hello"}],
     )
