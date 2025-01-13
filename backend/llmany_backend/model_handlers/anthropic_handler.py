@@ -13,11 +13,12 @@ class AnthropicHandler(ModelHandler):
     ) -> str:
         history.append({"role": "user", "content": message})
         completion = self.client.messages.create(  # type: ignore
+            max_tokens=1024,
             model=model,  # type: ignore
             messages=history,  # type: ignore
         )
         return (
-            completion.content
+            completion.content[0].model_dump()["text"]
             if completion.content is not None
             else "An unexpected error occurred, please try sending the message again"
         )
