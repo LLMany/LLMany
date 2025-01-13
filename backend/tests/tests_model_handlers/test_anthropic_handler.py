@@ -1,13 +1,14 @@
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, create_autospec
+from anthropic.types import TextBlock
 
 from llmany_backend.model_handlers import AnthropicHandler
 
 
 def test_send_message(mocker):
     mock_openai_instance = MagicMock()
-    mock_choice = MagicMock()
-    mock_choice.content = "Hello, this is Skynet!"
-    mock_openai_instance.messages.create.return_value = mock_choice
+    mock_choice = create_autospec(TextBlock)
+    mock_choice.text = "Hello, this is Skynet!"
+    mock_openai_instance.messages.create.return_value = MagicMock(content=[mock_choice])
     mocker.patch(
         "llmany_backend.model_handlers.anthropic_handler.Anthropic",
         return_value=mock_openai_instance,

@@ -1,4 +1,5 @@
 from anthropic import Anthropic
+from anthropic.types import TextBlock
 
 from llmany_backend.model_handler import ModelHandler
 
@@ -18,8 +19,9 @@ class AnthropicHandler(ModelHandler):
             messages=history,  # type: ignore
         )
         return (
-            completion.content[0].model_dump()["text"]
+            completion.content[0].text
             if completion.content is not None
+            and isinstance(completion.content[0], TextBlock)
             else "An unexpected error occurred, please try sending the message again"
         )
 
