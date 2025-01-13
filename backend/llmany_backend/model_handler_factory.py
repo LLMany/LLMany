@@ -18,5 +18,7 @@ class ModelHandlerFactory:
                 return AnthropicHandler(api_key)
             case "Qwen":
                 return QwenHandler(api_key)
+            case "Grok":
+                return QwenHandler(api_key)
             case _:
                 raise ValueError(f"Unsupported model type: {model_type}")
