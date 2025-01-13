@@ -1,7 +1,7 @@
 from llmany_backend.database_handler import DatabaseHandler
 from llmany_backend.model_handler_factory import ModelHandlerFactory
 from llmany_backend.llmany_requests.message_request import MessageRequest
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 
 def test_message_request_initialization():
@@ -94,26 +94,27 @@ def test_message_request_execute():
         contents,
     )
 
-    with patch("builtins.print") as mock_print:
-        request.execute()
+    request.execute()
 
-        assert request.chat_history == [
+    assert request.chat_history == [
+        {"role": "user", "content": "Hello there"},
+        {"role": "assistant", "content": "General Kenobi"},
+        {"role": "user", "content": "How are you?"},
+    ]
+
+    mock_database_handler.add_message_to_chat.assert_any_call(
+        chat_id, "user", "How are you?"
+    )
+    mock_database_handler.add_message_to_chat.assert_any_call(
+        chat_id, "assistant", "Hello, user!"
+    )
+
+    mock_model_handler.send_message.assert_called_once_with(
+        model="openai",
+        message="How are you?",
+        history=[
             {"role": "user", "content": "Hello there"},
             {"role": "assistant", "content": "General Kenobi"},
             {"role": "user", "content": "How are you?"},
-        ]
-
-        mock_database_handler.add_message_to_chat.assert_any_call(
-            chat_id, "user", "How are you?"
-        )
-        mock_database_handler.add_message_to_chat.assert_any_call(
-            chat_id, "assistant", "Hello, user!"
-        )
-
-        mock_model_handler.send_message.assert_called_once_with(
-            model="openai", messages=request.chat_history
-        )
-
-        mock_print.assert_called_once_with(
-            '{"type": "message", "chat_id": 12345, "content": "Hello, user!"}'
-        )
+        ],
+    )
