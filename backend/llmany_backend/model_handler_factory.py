@@ -1,5 +1,10 @@
 from llmany_backend.model_handler import ModelHandler
-from llmany_backend.model_handlers import GoogleHandler, OpenAIHandler, AnthropicHandler
+from llmany_backend.model_handlers import (
+    GoogleHandler,
+    OpenAIHandler,
+    AnthropicHandler,
+    QwenHandler,
+)
 
 
 class ModelHandlerFactory:
@@ -11,5 +16,7 @@ class ModelHandlerFactory:
                 return GoogleHandler(api_key)
             case "Anthropic":
                 return AnthropicHandler(api_key)
+            case "Qwen":
+                return QwenHandler(api_key)
             case _:
                 raise ValueError(f"Unsupported model type: {model_type}")
