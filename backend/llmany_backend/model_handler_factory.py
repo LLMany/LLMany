@@ -4,6 +4,7 @@ from llmany_backend.model_handlers import (
     OpenAIHandler,
     AnthropicHandler,
     QwenHandler,
+    DeepseekHandler,
 )
 
 
@@ -18,5 +19,7 @@ class ModelHandlerFactory:
                 return AnthropicHandler(api_key)
             case "Qwen":
                 return QwenHandler(api_key)
+            case "Deepseek":
+                return DeepseekHandler(api_key)
             case _:
                 raise ValueError(f"Unsupported model type: {model_type}")
