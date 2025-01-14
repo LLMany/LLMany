@@ -23,7 +23,7 @@ def main():
             request_object.execute()
 
         except Exception as e:
-            json.dump({"error": str(e)}, sys.stdin)
+            json.dump({"error": str(e)}, sys.stdout)
 
     connection.close()
 
