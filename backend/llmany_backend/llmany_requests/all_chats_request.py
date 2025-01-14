@@ -1,9 +1,9 @@
 import json
 from llmany_backend.database_handler import DatabaseHandler
-from llmany_backend.llmany_request import Request
+from llmany_backend.llmany_request import LLManyRequest
 
 
-class AllChatsRequest(Request):
+class AllChatsRequest(LLManyRequest):
     def __init__(self, database_handler: DatabaseHandler) -> None:
         self.database_handler: DatabaseHandler = database_handler
 

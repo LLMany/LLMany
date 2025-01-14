@@ -1,10 +1,10 @@
 import json
 import sqlite3
 from llmany_backend.database_handler import DatabaseHandler
-from llmany_backend.llmany_request import Request
+from llmany_backend.llmany_request import LLManyRequest
 
 
-class DeleteChatRequest(Request):
+class DeleteChatRequest(LLManyRequest):
     def __init__(self, database_handler: DatabaseHandler, chat_ID: int) -> None:
         self.database_handler: DatabaseHandler = database_handler
         self.chat_ID: int = chat_ID
