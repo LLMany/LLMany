@@ -25,4 +25,4 @@ class DeleteChatRequest(Request):
             "chat_id": self.chat_ID,
             "status": status,
         }
-        print(json.dumps(returned_value))
+        print(json.dumps(returned_value), flush=True)

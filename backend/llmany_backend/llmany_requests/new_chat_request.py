@@ -25,4 +25,4 @@ class NewChatRequest(Request):
             "model": self.model,
             "chat_id": new_chat_ID,
         }
-        print(json.dumps(returned_value))
+        print(json.dumps(returned_value), flush=True)
