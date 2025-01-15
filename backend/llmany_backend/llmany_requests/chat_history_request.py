@@ -21,4 +21,4 @@ class ChatHistoryRequest(Request):
             "chat_id": self.chat_ID,
             "messages": chat_history,
         }
-        print(json.dumps(returned_value))
+        print(json.dumps(returned_value), flush=True)
