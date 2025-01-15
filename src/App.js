@@ -15,7 +15,7 @@ function App() {
 
     useEffect(() => {
 
-        handleSendData(allChatsRequest()).then(data => {console.log(data)})
+
 
         // return window.electronAPI.onPythonMessage((data) => {
         //     setMessages(prev => [...prev, data]);

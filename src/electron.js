@@ -41,13 +41,20 @@ function startPythonBackend() {
 
     // Handle Python process output
     pythonProcess.stdout.on('data', (data) => {
-        const message = data.toString().trim();
+        const message = data.toString().split('\n')[0].trim();
         try {
+            console.log('Received python data:\n' + message);
             // Parse Python output as JSON
             const jsonData = JSON.parse(message);
-            mainWindow.webContents.send('from-python', jsonData);
+            if (mainWindow && !mainWindow.isDestroyed()) {
+                console.log('Send to main process: ' + jsonData);
+                mainWindow.webContents.send('from-python', jsonData);
+            } else {
+                console.log('mainWindow is not available.');
+                ipcMain.handle('from-python', jsonData);
+            }
         } catch (e) {
-            console.log('Python output:', message);
+            console.log('Python output with exception:\n' + e + "\n" + message);
         }
     });
 
@@ -65,10 +72,12 @@ ipcMain.handle('to-python', async (event, data) => {
     if (pythonProcess && !pythonProcess.killed) {
         // Send data to Python process
         pythonProcess.stdin.write(JSON.stringify(data) + '\n');
-        return { success: true };
+        console.log("Handle data: " + JSON.stringify(data));
+        return { data };
     }
     return { success: false, error: 'Python process not running' };
 });
+
 
 app.whenReady().then(createWindow);
 
@@ -80,3 +89,4 @@ app.on('window-all-closed', () => {
         app.quit();
     }
 });
+

@@ -1,8 +1,10 @@
-import {useContext, useState} from "react"
+import {useCallback, useContext, useEffect, useState} from "react"
 import {Context} from "../App"
 import HistoryElement from "./HistoryElement"
 import {placeholderChats} from "../utils/placeholderData"
 import {EMPTY_CHAT} from "../utils/constants"
+import {handlePythonMessage, handleResponse, handleSendData} from "../communication/requestHandlers";
+import {allChatsRequest} from "../communication/requestCreators";
 
 function HistoryList() {
 
@@ -12,6 +14,11 @@ function HistoryList() {
 
     const [currentChatID, setCurrentChatID] = chatID
 
+    useEffect(() => {
+        console.log("Effect invoked.")
+        handleSendData(allChatsRequest()).then()
+        handlePythonMessage()
+    }, [chatID])
 
 
     const chatsList = chatHistory.map((chat) => {
