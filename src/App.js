@@ -1,49 +1,44 @@
 import './App.css';
-import React, {useEffect, useState} from "react"
+import React, { useEffect, useState } from "react";
 import Header from "./components/Header";
 import MainContainer from "./components/MainContainer";
-import {DEFAULT_MODEL, EMPTY_CHAT, EMPTY_INPUT} from "./utils/constants";
-import {handleSendData} from "./communication/requestHandlers";
-import {allChatsRequest, chatHistoryRequest} from "./communication/requestCreators";
-
+import { DEFAULT_MODEL, EMPTY_CHAT } from "./utils/constants";
 
 export const Context = React.createContext();
 
 function App() {
-
     const [currentModel, setCurrentModel] = useState(DEFAULT_MODEL);
     const [currentChatID, setCurrentChatID] = useState(EMPTY_CHAT);
+    const [receivedData, setReceivedData] = useState([]); // State for received data
 
     useEffect(() => {
-        const handlePythonData = (event, data) => {
-            console.log(data)
-            setReceivedData((prevData) => [...prevData, data]); // Add new data to state
-        };
+        if (window.electronAPI) { // Check if electronAPI exists
 
-        return () => {
-            window.electron.ipcRenderer.removeAllListeners('python-data'); // Important cleanup
-        };
+            const handlePythonData = (data) => {
+                console.log("Data from Python:", data);
+                setReceivedData((prevData) => [...prevData, data]);
+            };
 
+            const removeListener = window.electronAPI.onPythonMessage(handlePythonData);
 
-        // return window.electronAPI.onPythonMessage((data) => {
-        //     setMessages(prev => [...prev, data]);
-        // });
+            return () => {
+                removeListener(); // Correct cleanup using the removeListener function
+            };
+        }
     }, []);
-
-
 
     return (
         <Context.Provider
             value={{
                 model: [currentModel, setCurrentModel],
                 chatID: [currentChatID, setCurrentChatID],
+                pythonData: [receivedData, setReceivedData] // Provide received data in context
             }}
             className="App"
         >
-            <Header/>
-            <MainContainer/>
+            <Header />
+            <MainContainer />
         </Context.Provider>
-
     );
 }
 

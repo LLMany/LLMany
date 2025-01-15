@@ -1,68 +1,75 @@
-import {useCallback, useContext, useEffect, useState} from "react"
-import {Context} from "../App"
-import HistoryElement from "./HistoryElement"
-import {placeholderChats} from "../utils/placeholderData"
-import {EMPTY_CHAT} from "../utils/constants"
-import {
-    handlePythonMessage,
-    handleResponse,
-    handleSendData,
-    passReceivedObject
-} from "../communication/requestHandlers";
-import {allChatsRequest} from "../communication/requestCreators";
+import { useCallback, useContext, useEffect, useState } from "react";
+import { Context } from "../App";
+import HistoryElement from "./HistoryElement";
+import { placeholderChats } from "../utils/placeholderData";
+import { EMPTY_CHAT } from "../utils/constants";
+import { handlePythonMessage } from "../communication/requestHandlers";
+import { allChatsRequest } from "../communication/requestCreators";
 import message from "./Message";
 
 function HistoryList() {
+  const [chatHistory, setChatHistory] = useState(placeholderChats);
+  const { chatID } = useContext(Context);
 
-    const [chatHistory, setChatHistory] = useState(placeholderChats)
-    const {chatID} = useContext(Context)
-
-    let tempData
-    const [currentChatID, setCurrentChatID] = chatID
-
-    const tempFunc = async () => {
-        tempData = await handlePythonMessage()
+  const handleReceivedData = useCallback((data) => {
+    console.log("Received in React:", data);
+    if (Array.isArray(data)) { // Check if data is an array
+        setChatHistory(data);
+        if (data.length > 0) {
+          setCurrentChatID(data[0].chatID)
+        }
+    } else {
+        console.error("Received data is not an array:", data);
+        // Handle the error appropriately, e.g., set an error state
     }
+}, [setCurrentChatID]); // Add setCurrentChatID as a dependency
 
+
+  useEffect(() => {
+        if (window.electronAPI) {
+            window.electronAPI.sendToPython(allChatsRequest());
+            const removeListener = window.electronAPI.onPythonMessage(handleReceivedData);
+
+            return () => {
+                removeListener();
+            };
+        }
+    }, [handleReceivedData]); 
+    
+    
     useEffect(() => {
+    if (window.electronAPI) {
+      const handleReceivedData = (data) => {
+        console.log("Received in React:", data);
+        // Update your state with received messages (e.g., setChatHistory)
+        ; // Assuming data contains chat information
+      };
 
-        const handleFromPython = (event, message) => {
-            // Update component state or perform actions with the received message
-            console.log('Received from Python:', message);
-            // For example, if you have a state variable 'messages':
-            // setMessages(prevMessages => [...prevMessages, message]);
-        };
+      window.electronAPI.sendToPython(allChatsRequest()); // Send request
+      const removeListener = window.electronAPI.onPythonMessage(handleReceivedData);
 
-        window.electronAPI.onPythonMessage(handlePythonMessage())
-        // ipcRenderer.on('from-python', handleFromPython);
+      return () => {
+        removeListener();
+      };
+    }
+  }, [chatID]);
 
-        // Important: Remove the listener when the component unmounts
-        return () => {
-            // ipcRenderer.removeListener('from-python', handleFromPython);
-        };
-    }, [chatID]); //
+  const chatsList = chatHistory.map((chat) => (
+    <HistoryElement
+      key={chat.chatID} // Add a key prop for better performance
+      chatID={chat.chatID}
+      selected={chatID === chat.chatID}
+      onClick={() => setCurrentChatID(chat.chatID)}
+    />
+  ));
 
-
-    const chatsList = chatHistory.map((chat) => {
-        return <HistoryElement
-            chatID={chat.chatID}
-            selected={currentChatID === chat.chatID}
-            onClick={() => setCurrentChatID(chat.chatID)}
-        />
-    })
-
-    return (
-        <div style={{
-            display: "flex",
-            flexDirection: "column",
-            fontWeight: "bold",
-            gap: "4px"
-        }}>
-            <br/>
-            History
-            {chatsList}
-        </div>
-    )
+  return (
+    <div style={{ display: "flex", flexDirection: "column", fontWeight: "bold", gap: "4px" }}>
+      <br />
+      History
+      {chatsList}
+    </div>
+  );
 }
 
 export default HistoryList;
