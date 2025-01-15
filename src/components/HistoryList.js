@@ -34,9 +34,9 @@ function HistoryList() {
                 removeListener();
             };
         }
-    }, [handleReceivedData]); 
-    
-    
+    }, [handleReceivedData]);
+
+
     useEffect(() => {
     if (window.electronAPI) {
       const handleReceivedData = (data) => {
