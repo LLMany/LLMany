@@ -1,15 +1,28 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
-contextBridge.exposeInMainWorld('electronAPI', {
-    // Send data to Python
+
+
+const API = {
     sendToPython: (data) => ipcRenderer.invoke('to-python', data),
 
-    // Register handler for receiving data from Python
     onPythonMessage: (callback) => {
         ipcRenderer.on('from-python', (event, data) => callback(data));
-        // Return cleanup function
         return () => {
             ipcRenderer.removeAllListeners('from-python');
         };
     }
-});
+}
+
+
+
+contextBridge.exposeInMainWorld('electronAPI', API);
+
+contextBridge.exposeInMainWorld('electron', { // Expose to window.electron
+    ipcRenderer: {
+      invoke: (channel, ...args) => ipcRenderer.invoke(channel, ...args),
+      send: (channel, ...args) => ipcRenderer.send(channel, ...args), // If you need send
+      on: (channel, func) => ipcRenderer.on(channel, func),
+      removeAllListeners: (channel) => ipcRenderer.removeAllListeners(channel), // Important for cleanup
+      // ... other methods you need
+    },
+  });

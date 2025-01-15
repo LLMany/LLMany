@@ -11,7 +11,7 @@ function createWindow() {
         height: 600,
         webPreferences: {
             nodeIntegration: true,
-            preload: join(__dirname, 'preload'),
+            preload: join(__dirname, 'preload.js'),
         },
     });
 
@@ -38,16 +38,25 @@ function startPythonBackend() {
     process.chdir('backend');
     pythonProcess = spawn('poetry', ['run', 'python', scriptPath]);
     process.chdir('..')
-
+    console.log("Started backend")
     // Handle Python process output
     pythonProcess.stdout.on('data', (data) => {
-        const message = data.toString().trim();
+        const message = data.toString().split('\n')[0].trim();
+
+        console.log("Received python data:\n" + message)
         try {
+            console.log('Received python data:\n' + message);
             // Parse Python output as JSON
             const jsonData = JSON.parse(message);
-            mainWindow.webContents.send('from-python', jsonData);
+            if (mainWindow && !mainWindow.isDestroyed()) {
+                console.log('Send to main process: ' + jsonData);
+                mainWindow.webContents.send('from-python', jsonData);
+            } else {
+                console.log('mainWindow is not available.');
+                ipcMain.handle('from-python', jsonData);
+            }
         } catch (e) {
-            console.log('Python output:', message);
+            console.log('Python output with exception:\n' + e + "\n" + message);
         }
     });
 
@@ -60,15 +69,14 @@ function startPythonBackend() {
     });
 }
 
-// Handle IPC messages from React
-ipcMain.handle('to-python', async (event, data) => {
+ipcMain.on('to-python', (event, data) => {
+    console.log("Received request from rendered")
+    console.log(JSON.stringify(data));
     if (pythonProcess && !pythonProcess.killed) {
-        // Send data to Python process
         pythonProcess.stdin.write(JSON.stringify(data) + '\n');
-        return { success: true };
     }
-    return { success: false, error: 'Python process not running' };
-});
+})
+
 
 app.whenReady().then(createWindow);
 
@@ -80,3 +88,4 @@ app.on('window-all-closed', () => {
         app.quit();
     }
 });
+
