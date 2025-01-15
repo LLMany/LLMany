@@ -7,12 +7,16 @@ export const handleSendData = async (request) => {
     }
 };
 
-export function handlePythonMessage() {
-    window.electron.ipcRenderer.on('from-python', handlePythonData);
+export async function handlePythonMessage() {
+    window.electron.ipcRenderer.on('from-python', passReceivedObject);
 }
 
 const handlePythonData = (event, data) => {
-    console.log(data)
+    console.log("Renderer received: " + data)
 };
 
 
+export const passReceivedObject = (data) => {
+    console.log("Renderer received: " + data)
+    return data;
+}

@@ -16,6 +16,7 @@ const API = {
 
 
 contextBridge.exposeInMainWorld('electronAPI', API);
+
 contextBridge.exposeInMainWorld('electron', { // Expose to window.electron
     ipcRenderer: {
       invoke: (channel, ...args) => ipcRenderer.invoke(channel, ...args),

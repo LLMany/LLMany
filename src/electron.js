@@ -42,6 +42,7 @@ function startPythonBackend() {
     // Handle Python process output
     pythonProcess.stdout.on('data', (data) => {
         const message = data.toString().split('\n')[0].trim();
+
         console.log("Received python data:\n" + message)
         try {
             console.log('Received python data:\n' + message);
