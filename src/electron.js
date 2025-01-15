@@ -11,7 +11,7 @@ function createWindow() {
         height: 600,
         webPreferences: {
             nodeIntegration: true,
-            preload: join(__dirname, 'preload'),
+            preload: join(__dirname, 'preload.js'),
         },
     });
 
@@ -38,10 +38,11 @@ function startPythonBackend() {
     process.chdir('backend');
     pythonProcess = spawn('poetry', ['run', 'python', scriptPath]);
     process.chdir('..')
-
+    console.log("Started backend")
     // Handle Python process output
     pythonProcess.stdout.on('data', (data) => {
         const message = data.toString().split('\n')[0].trim();
+        console.log("Received python data:\n" + message)
         try {
             console.log('Received python data:\n' + message);
             // Parse Python output as JSON
@@ -67,16 +68,13 @@ function startPythonBackend() {
     });
 }
 
-// Handle IPC messages from React
-ipcMain.handle('to-python', async (event, data) => {
+ipcMain.on('to-python', (event, data) => {
+    console.log("Received request from rendered")
+    console.log(JSON.stringify(data));
     if (pythonProcess && !pythonProcess.killed) {
-        // Send data to Python process
         pythonProcess.stdin.write(JSON.stringify(data) + '\n');
-        console.log("Handle data: " + JSON.stringify(data));
-        return { data };
     }
-    return { success: false, error: 'Python process not running' };
-});
+})
 
 
 app.whenReady().then(createWindow);

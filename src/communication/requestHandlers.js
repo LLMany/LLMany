@@ -1,14 +1,18 @@
 export const handleSendData = async (request) => {
     try {
         console.log(request);
-        await window.electronAPI.sendToPython(request);
+        window.electron.ipcRenderer.send('to-python', request)
     } catch (error) {
         console.error('Error sending data:', error);
     }
 };
 
 export function handlePythonMessage() {
-    window.electronAPI.onPythonMessage((data) => {
-        console.log(data);
-    })
+    window.electron.ipcRenderer.on('from-python', handlePythonData);
 }
+
+const handlePythonData = (event, data) => {
+    console.log(data)
+};
+
+

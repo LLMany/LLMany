@@ -6,6 +6,7 @@ import {DEFAULT_MODEL, EMPTY_CHAT, EMPTY_INPUT} from "./utils/constants";
 import {handleSendData} from "./communication/requestHandlers";
 import {allChatsRequest, chatHistoryRequest} from "./communication/requestCreators";
 
+
 export const Context = React.createContext();
 
 function App() {
@@ -14,7 +15,14 @@ function App() {
     const [currentChatID, setCurrentChatID] = useState(EMPTY_CHAT);
 
     useEffect(() => {
+        const handlePythonData = (event, data) => {
+            console.log(data)
+            setReceivedData((prevData) => [...prevData, data]); // Add new data to state
+        };
 
+        return () => {
+            window.electron.ipcRenderer.removeAllListeners('python-data'); // Important cleanup
+        };
 
 
         // return window.electronAPI.onPythonMessage((data) => {

@@ -16,3 +16,12 @@ const API = {
 
 
 contextBridge.exposeInMainWorld('electronAPI', API);
+contextBridge.exposeInMainWorld('electron', { // Expose to window.electron
+    ipcRenderer: {
+      invoke: (channel, ...args) => ipcRenderer.invoke(channel, ...args),
+      send: (channel, ...args) => ipcRenderer.send(channel, ...args), // If you need send
+      on: (channel, func) => ipcRenderer.on(channel, func),
+      removeAllListeners: (channel) => ipcRenderer.removeAllListeners(channel), // Important for cleanup
+      // ... other methods you need
+    },
+  });
