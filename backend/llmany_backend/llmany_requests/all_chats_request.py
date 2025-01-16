@@ -14,4 +14,4 @@ class AllChatsRequest(LLManyRequest):
     def execute(self) -> None:
         all_chats: list[dict[str, str]] = self.database_handler.get_all_chats()
         returned_value = {"type": "all_chats", "chats": all_chats}
-        print(json.dumps(returned_value))
+        print(json.dumps(returned_value), flush=True)
