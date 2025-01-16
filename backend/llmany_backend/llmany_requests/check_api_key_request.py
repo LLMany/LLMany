@@ -24,4 +24,4 @@ class CheckApiKeyRequest(Request):
             "chat_id": self.model_type,
             "exists": exists,
         }
-        print(json.dumps(returned_value))
+        print(json.dumps(returned_value), flush=True)
