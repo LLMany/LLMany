@@ -1,11 +1,11 @@
 from llmany_backend.model_handler import ModelHandler
 from llmany_backend.database_handler import DatabaseHandler
 from llmany_backend.model_handler_factory import ModelHandlerFactory
-from llmany_backend.request import Request
+from llmany_backend.llmany_request import LLManyRequest
 import json
 
 
-class MessageRequest(Request):
+class MessageRequest(LLManyRequest):
     def __init__(
         self,
         model_handler: ModelHandlerFactory,
