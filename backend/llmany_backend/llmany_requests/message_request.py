@@ -48,6 +48,8 @@ class MessageRequest(Request):
 
     def execute(self) -> None:
         api_key = self.database_handler.get_api_key(self.model_type)
+        if self.model_type == "HuggingFace":
+            api_key = ""
         if api_key is None:
             returned_value = {
                 "type": "message",
@@ -58,7 +60,6 @@ class MessageRequest(Request):
             model: ModelHandler = self.model_handler_factory.create_model_handler(
                 self.model_type, api_key
             )
-            self.chat_history.append({"role": "user", "content": self.contents})
             response: str = model.send_message(
                 model=self.model, message=self.contents, history=self.chat_history
             )
