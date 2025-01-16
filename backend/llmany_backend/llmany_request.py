@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class Request(ABC):
+class LLManyRequest(ABC):
     @abstractmethod
     def execute(self) -> None:
         pass
