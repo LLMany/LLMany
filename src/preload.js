@@ -4,13 +4,13 @@ const { contextBridge, ipcRenderer } = require('electron');
 
 const API = {
     sendToPython: (data) => ipcRenderer.invoke('to-python', data),
-
     onPythonMessage: (callback) => {
         ipcRenderer.on('from-python', (event, data) => callback(data));
         return () => {
             ipcRenderer.removeAllListeners('from-python');
         };
-    }
+    },
+    fetchData: () => ipcRenderer.invoke('fetch-data'),
 }
 
 

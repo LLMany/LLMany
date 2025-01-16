@@ -17,29 +17,21 @@ function HistoryList() {
     const [chatHistory, setChatHistory] = useState(placeholderChats)
     const {chatID} = useContext(Context)
 
-    let tempData
+    const [tempData, setTempData] = useState(0)
     const [currentChatID, setCurrentChatID] = chatID
 
     const tempFunc = async () => {
-        tempData = await handlePythonMessage()
+        // let temp = window.electronAPI.fetchData().then(function(result) {
+        //     console.log(result)
+        //     setTempData(result)
+        // })
+        let temp = await window.electronAPI.sendToPython(allChatsRequest())
+
+        console.log("sendToPython", temp)
     }
 
     useEffect(() => {
 
-        const handleFromPython = (event, message) => {
-            // Update component state or perform actions with the received message
-            console.log('Received from Python:', message);
-            // For example, if you have a state variable 'messages':
-            // setMessages(prevMessages => [...prevMessages, message]);
-        };
-
-        window.electronAPI.onPythonMessage(handlePythonMessage())
-        // ipcRenderer.on('from-python', handleFromPython);
-
-        // Important: Remove the listener when the component unmounts
-        return () => {
-            // ipcRenderer.removeListener('from-python', handleFromPython);
-        };
     }, [chatID]); //
 
 
@@ -59,6 +51,7 @@ function HistoryList() {
             gap: "4px"
         }}>
             <br/>
+            <button onClick={tempFunc}>{tempData}</button>
             History
             {chatsList}
         </div>
