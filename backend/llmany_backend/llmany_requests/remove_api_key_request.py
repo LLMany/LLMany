@@ -1,8 +1,8 @@
 from llmany_backend.database_handler import DatabaseHandler
-from llmany_backend.request import Request
+from llmany_backend.llmany_request import LLManyRequest
 
 
-class RemoveApiKeyRequest(Request):
+class RemoveApiKeyRequest(LLManyRequest):
     def __init__(self, database_handler: DatabaseHandler, model_type: str) -> None:
         self.database_handler: DatabaseHandler = database_handler
         self.model_type: str = model_type
