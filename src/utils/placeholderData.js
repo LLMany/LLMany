@@ -6,8 +6,8 @@ export const placeholderMessages = [
 ]
 
 export const placeholderChats = [
-    { model: CHAT_GPT, chatID: 1000 },
-    { model: GEMINI, chatID: 1001 },
-    { model: CHAT_GPT, chatID: 2000 },
-    { model: CLAUDE, chatID: 1015 },
+    { model: CHAT_GPT, chat_id: 1000 },
+    { model: GEMINI, chat_id: 1001 },
+    { model: CHAT_GPT, chat_id: 2000 },
+    { model: CLAUDE, chat_id: 1015 },
 ]

@@ -5,6 +5,8 @@ import {Context} from "../App";
 import {EMPTY_CHAT, EMPTY_INPUT, MODEL_MESSAGE, USER_MESSAGE} from "../utils/constants";
 import {placeholderMessages} from "../utils/placeholderData";
 import EmptyChat from "./EmptyChat";
+import {getNewChatID} from "../communication/requestHandlers";
+import {modelMap} from "../utils/values";
 
 
 function ChatBox() {
@@ -21,8 +23,8 @@ function ChatBox() {
             return;
         }
         if (currentChatID === EMPTY_CHAT) {
-            // setCurrentChatID(handleSendData(newChatRequest(currentModelProvider, currentModel)));
-            setCurrentChatID(1000);
+            let modelProvider = modelMap[currentModel].provider;
+            setCurrentChatID(getNewChatID(modelProvider, currentModel));
             // Add chat to history
         }
         const newUserMessage = {owner: USER_MESSAGE, content: message};

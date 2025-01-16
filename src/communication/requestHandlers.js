@@ -1,22 +1,30 @@
-export const handleSendData = async (request) => {
-    try {
-        console.log(request);
-        window.electron.ipcRenderer.send('to-python', request)
-    } catch (error) {
-        console.error('Error sending data:', error);
-    }
-};
+import {placeholderChats} from "../utils/placeholderData";
+import {EMPTY_CHAT} from "../utils/constants";
+import {newChatRequest} from "./requestCreators";
 
-export async function handlePythonMessage() {
-    window.electron.ipcRenderer.on('from-python', passReceivedObject);
+
+export const getAllChats = (setChatHistory) => {
+    let chats = [];
+    window.electronAPI.sendToPython({"type": "all_chats"})
+    window.electronAPI.onPythonMessage((data)=> {
+        let receivedObject = JSON.parse(data);
+        console.log(receivedObject + receivedObject.type + receivedObject.chats);
+        if (receivedObject?.type === 'all_chats')
+            chats = receivedObject?.chats ?? [];
+        setChatHistory(chats);
+    })
+    console.log(chats);
+    return chats;
 }
 
-const handlePythonData = (event, data) => {
-    console.log("Renderer received: " + data)
-};
+export const getNewChatID = (modelProvider, model) => {
+    let newChatID = EMPTY_CHAT;
+    window.electronAPI.sendToPython(newChatRequest(modelProvider, model));
+    window.electronAPI.onPythonMessage((data)=> {
+        let receivedObject = JSON.parse(data);
+        if (receivedObject?.type === 'new_chat')
+            newChatID = receivedObject?.chat_id ?? EMPTY_CHAT;
+    })
 
-
-export const passReceivedObject = (data) => {
-    console.log("Renderer received: " + data)
-    return data;
+    return newChatID
 }

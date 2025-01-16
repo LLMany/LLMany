@@ -12,6 +12,7 @@ function App() {
     const [receivedData, setReceivedData] = useState([]); // State for received data
 
     useEffect(() => {
+
     }, []);
 
     return (

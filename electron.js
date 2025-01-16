@@ -50,6 +50,8 @@ function startPythonBackend() {
     console.log("Started backend")
     // Handle Python process output
     pythonProcess.stdout.on('data', (data) => {
+        console.log("----\n" + data + "----\n");
+
         const message = data.toString().split('\n')[0].trim();
 
         console.log("Received python data in electron:\n" + message)
@@ -78,7 +80,7 @@ function startPythonBackend() {
 }
 
 ipcMain.on('to-python', (event, data) => {
-    console.log("Received request from rendered")
+    console.log("Received request from renderer")
     console.log(JSON.stringify(data));
     if (pythonProcess && !pythonProcess.killed) {
         pythonProcess.stdin.write(JSON.stringify(data) + '\n');

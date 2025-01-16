@@ -5,6 +5,7 @@ import {placeholderChats} from "../utils/placeholderData"
 import {EMPTY_CHAT} from "../utils/constants"
 import {allChatsRequest} from "../communication/requestCreators";
 import message from "./Message";
+import {getAllChats} from "../communication/requestHandlers";
 
 function HistoryList() {
 
@@ -15,29 +16,16 @@ function HistoryList() {
     const [currentChatID, setCurrentChatID] = chatID
 
     useEffect(() => {
-
-        const handleFromPython = (event, message) => {
-            // Update component state or perform actions with the received message
-            console.log('Received from Python:', message);
-            // For example, if you have a state variable 'messages':
-            // setMessages(prevMessages => [...prevMessages, message]);
-        };
-        window.electronAPI.sendToPython({"type": "all_chats"})
-        window.electronAPI.onPythonMessage((data)=> {setTempData(JSON.stringify(data))})
-        // ipcRenderer.on('from-python', handleFromPython);
-
-        // Important: Remove the listener when the component unmounts
-        return () => {
-            // ipcRenderer.removeListener('from-python', handleFromPython);
-        };
+        getAllChats(setChatHistory)
+        console.log(chatHistory)
     }, [chatID]); //
 
 
     const chatsList = chatHistory.map((chat) => {
         return <HistoryElement
-            chatID={chat.chatID}
-            selected={currentChatID === chat.chatID}
-            onClick={() => setCurrentChatID(chat.chatID)}
+            chatID={chat.chat_id}
+            selected={currentChatID === chat.chat_id}
+            onClick={() => setCurrentChatID(chat.chat_id)}
         />
     })
 
@@ -49,7 +37,6 @@ function HistoryList() {
             gap: "4px"
         }}>
             <br/>
-            {tempData}
             History
             {chatsList}
         </div>
