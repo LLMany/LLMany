@@ -4,6 +4,7 @@ from llmany_backend.model_handlers import (
     OpenAIHandler,
     AnthropicHandler,
     QwenHandler,
+    GrokHandler,
     DeepseekHandler,
     HuggingfaceHandler,
 )
@@ -20,6 +21,8 @@ class ModelHandlerFactory:
                 return AnthropicHandler(api_key)
             case "Qwen":
                 return QwenHandler(api_key)
+            case "Grok":
+                return GrokHandler(api_key)
             case "Deepseek":
                 return DeepseekHandler(api_key)
             case "HuggingFace":
