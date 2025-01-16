@@ -73,4 +73,4 @@ class MessageRequest(Request):
                 "chat_id": self.chat_ID,
                 "content": response,
             }
-        print(json.dumps(returned_value))
+        print(json.dumps(returned_value), flush=True)

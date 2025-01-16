@@ -21,7 +21,7 @@ class CheckApiKeyRequest(Request):
 
         returned_value = {
             "type": "check_api_key",
-            "chat_id": self.model_type,
+            "model_type": self.model_type,
             "exists": exists,
         }
-        print(json.dumps(returned_value))
+        print(json.dumps(returned_value), flush=True)
