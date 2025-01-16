@@ -1,6 +1,6 @@
 export function messageRequest(chatID, message) {
     return {
-        type: "messageRequest",
+        type: "message",
         chat_id: chatID,
         contents: message
     }

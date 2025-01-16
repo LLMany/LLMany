@@ -5,27 +5,35 @@ import {placeholderChats} from "../utils/placeholderData"
 import {EMPTY_CHAT} from "../utils/constants"
 import {allChatsRequest} from "../communication/requestCreators";
 import message from "./Message";
-import {getAllChats} from "../communication/requestHandlers";
+import {getAllChats, getNewChatID} from "../communication/requestHandlers";
+import {modelMap} from "../utils/values";
 
 function HistoryList() {
 
     const [chatHistory, setChatHistory] = useState(placeholderChats)
-    const {chatID} = useContext(Context)
+    const {chatID, model} = useContext(Context)
 
-    const [tempData, setTempData] = useState("DUPSKO")
     const [currentChatID, setCurrentChatID] = chatID
+    const [currentModel, setCurrentModel] = model
+
+
 
     useEffect(() => {
         getAllChats(setChatHistory)
-        console.log(chatHistory)
     }, [chatID]); //
 
+    const addNewChat = () => {
+        setCurrentChatID(EMPTY_CHAT)
+    }
 
     const chatsList = chatHistory.map((chat) => {
         return <HistoryElement
             chatID={chat.chat_id}
             selected={currentChatID === chat.chat_id}
-            onClick={() => setCurrentChatID(chat.chat_id)}
+            onClick={() => {
+                setCurrentChatID(chat.chat_id)
+                setCurrentModel(chat.model)
+            }}
         />
     })
 
@@ -38,6 +46,7 @@ function HistoryList() {
         }}>
             <br/>
             History
+            <button onClick={addNewChat}>New chat</button>
             {chatsList}
         </div>
     )

@@ -5,8 +5,10 @@ import {GEMINI} from "../utils/constants";
 function Header() {
 
     const addKey = () => {
-        const key = "AIzaSyBUlxJNVT5DsxOf4EkujnNBHcW6nwWdXno"
-        window.electronAPI.sendToPython(addAPIKeyRequest(modelMap[GEMINI].provider), key)
+        const key = ""
+        const request = addAPIKeyRequest(modelMap[GEMINI].provider, key)
+        console.log(request)
+        window.electronAPI.sendToPython(request)
     }
 
     const checkKey = () => {
