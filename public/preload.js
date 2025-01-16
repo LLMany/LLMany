@@ -8,7 +8,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
             callback(data);
         };
         ipcRenderer.on('from-python', listener);
-        console.log("In preload2")
+        console.log("In preload1")
         return () => {
             ipcRenderer.removeListener('from-python', listener);
         };

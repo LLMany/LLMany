@@ -1,19 +1,19 @@
 const {app, BrowserWindow, ipcMain} = require('electron');
-const {sep, resolve, join} = require("node:path");
+const {sep, resolve, join, dirname} = require("node:path");
 const {spawn} = require("child_process");
 
 let mainWindow;
 let pythonProcess;
 
 function createWindow() {
-    console.log(join(__dirname, 'preload.js'))
+    console.log(join(__dirname, 'public', 'preload.js'))
     mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: true,
-            preload: join(__dirname, 'preload.js'),
+            preload: join(__dirname, 'public','preload.js'),
         },
     });
 
@@ -42,8 +42,7 @@ app.on('activate', () => {
 });
 
 function startPythonBackend() {
-    const dir = resolve(__dirname, '..');
-    const scriptPath = join(dir, 'backend', 'llmany_backend', 'main.py');
+    const scriptPath = join(__dirname, 'backend', 'llmany_backend', 'main.py');
 
     process.chdir('backend');
     pythonProcess = spawn('poetry', ['run', 'python', scriptPath]);

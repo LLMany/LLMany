@@ -12,19 +12,6 @@ function App() {
     const [receivedData, setReceivedData] = useState([]); // State for received data
 
     useEffect(() => {
-        if (window.electronAPI) { // Check if electronAPI exists
-
-            const handlePythonData = (data) => {
-                console.log("Data from Python:", data);
-                setReceivedData((prevData) => [...prevData, data]);
-            };
-
-            const removeListener = window.electronAPI.onPythonMessage(handlePythonData);
-
-            return () => {
-                removeListener(); // Correct cleanup using the removeListener function
-            };
-        }
     }, []);
 
     return (
