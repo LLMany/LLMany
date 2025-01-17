@@ -14,6 +14,11 @@ class GoogleHandler(ModelHandler):
     ) -> str:
         if self.assistant is None:
             assistant = genai.GenerativeModel(model_name=model)
+        for pair in history:
+            if pair["role"] == "assistant":
+                pair["role"] = "model"
+            pair["parts"] = pair["content"]
+            pair.pop("content")
 
         chat = assistant.start_chat(history=history)
 
