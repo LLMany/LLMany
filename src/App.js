@@ -3,19 +3,19 @@ import React, { useEffect, useState } from "react";
 import Header from "./components/Header";
 import MainContainer from "./components/MainContainer";
 import { DEFAULT_MODEL, EMPTY_CHAT } from "./utils/constants";
- 
+
 export const Context = React.createContext();
- 
+
 function App() {
     const [currentModel, setCurrentModel] = useState(DEFAULT_MODEL);
     const [currentChatID, setCurrentChatID] = useState(EMPTY_CHAT);
     const [chatHistory, setChatHistory] = useState([])
     const [receivedData, setReceivedData] = useState([]); // State for received data
     const [messages, setMessages] = useState([]);
- 
+
     useEffect(() => {
     }, []);
- 
+
     return (
         <Context.Provider
             value={{
@@ -32,5 +32,5 @@ function App() {
         </Context.Provider>
     );
 }
- 
+
 export default App;

@@ -3,14 +3,14 @@ import {useContext, useState} from "react";
 import {Context} from "../App"
 import {modelList} from "../utils/values";
 import {EMPTY_CHAT} from "../utils/constants";
- 
+
 function ModelList() {
- 
+
     const {model, chatID} = useContext(Context);
- 
+
     const [currentModel, setCurrentModel] = model;
     const [currentChatID, setCurrentChatID] = chatID
- 
+
     const listItems = modelList.map((model) => {
         return <ModelElement
             modelName={model}
@@ -22,7 +22,7 @@ function ModelList() {
             }
         />;
     });
- 
+
     return (
         <>
             <div style={{
@@ -37,7 +37,6 @@ function ModelList() {
         </>
     )
 }
- 
+
 
     export default ModelList;
-

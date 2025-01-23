@@ -1,10 +1,10 @@
 import ModelMessage from "./message/ModelMessage";
 import UserMessage from "./message/UserMessage";
 import {USER_MESSAGE} from "../utils/constants";
- 
+
 function Chat({messages}) {
- 
- 
+
+
     return (
         <div
             style={{
@@ -27,5 +27,5 @@ function Chat({messages}) {
         </div>
     )
 }
- 
+
 export default Chat;
