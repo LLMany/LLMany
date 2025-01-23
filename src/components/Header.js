@@ -15,17 +15,13 @@ function Header() {
         window.electronAPI.sendToPython(checkAPIKeyRequest(modelMap[GEMINI].provider))
     }
     return (
-        <h3
-            style={{
-                paddingLeft: '8px',
-                display: 'flex',
-                flexDirection: 'row',
-            }}
-        >
-            LLMany
-            <button onClick={addKey}>Add API key</button>
-            <button onClick={checkKey}>Check API key</button>
-        </h3>
+        <div className = "flex flex-row justify-between items-center m-2">
+            <div className="font-bold ">LLMany</div>
+            <div className="space-x-4">
+                <button onClick={addKey}>Add API key</button>
+                <button onClick={checkKey}>Check API key</button>
+            </div>
+        </div>
     )
 }
 

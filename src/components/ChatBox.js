@@ -41,14 +41,14 @@ function ChatBox() {
     }
 
 
-    const onSendMessage = async (message) => {
+    const onSendMessage = (message) => {
         if (message === EMPTY_INPUT) {
             return;
         }
         addMessageToChat(addUserMessage(message));
         if (currentChatID === EMPTY_CHAT) {
             let modelProvider = modelMap[currentModel].provider;
-            await getNewChatID(modelProvider, currentModel, setCurrentChatID);
+            getNewChatID(modelProvider, currentModel, setCurrentChatID);
             getAllChats(setChatHistory)
             sendMessageToChat(currentChatID, message, addMessageToChat);
         } else {

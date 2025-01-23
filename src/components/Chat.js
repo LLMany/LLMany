@@ -18,9 +18,9 @@ function Chat({messages}) {
             }}
         >
             {
-                messages.map(({role, content}) => (
+                messages.map(({owner, content}) => (
                     <div key = {content}>
-                    {role === USER_MESSAGE ? ( // Access message.role
+                    {owner === USER_MESSAGE ? ( // Access message.role
                         <UserMessage message={content} /> // Access message.content
                         ) : (
                         <ModelMessage message={content} /> // Access message.content
