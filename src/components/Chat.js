@@ -1,10 +1,10 @@
 import ModelMessage from "./message/ModelMessage";
 import UserMessage from "./message/UserMessage";
 import {USER_MESSAGE} from "../utils/constants";
-
+ 
 function Chat({messages}) {
-
-
+ 
+ 
     return (
         <div
             style={{
@@ -18,8 +18,8 @@ function Chat({messages}) {
             }}
         >
             {
-                messages.map(({owner, content}) => (
-                    owner === USER_MESSAGE ?
+                messages.map(({role, content}) => (
+                    role === USER_MESSAGE ?
                         <UserMessage message={content}/> :
                         <ModelMessage message={content}/>
                 ))
@@ -27,5 +27,5 @@ function Chat({messages}) {
         </div>
     )
 }
-
+ 
 export default Chat;
