@@ -19,12 +19,15 @@ function ChatBox() {
     const [messages, setMessages] = messageList;
 
     useEffect(() => {
-        console.log("---------------");
-        console.log(messages)
+        console.log("---------------")
+        for (let i = 0; i < messages.length; i++) {
+            console.log(JSON.stringify(messages[i]));
+        }
         console.log("---------------");
     },[messages])
 
     const addMessageToChat = (responseMessage) => {
+        console.log("DUPSKO" + JSON.stringify(responseMessage))
         setMessages((prevMessages) => [...prevMessages, responseMessage]);
     }
 

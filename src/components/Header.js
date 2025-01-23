@@ -1,12 +1,12 @@
 import {addAPIKeyRequest, checkAPIKeyRequest} from "../communication/requestCreators";
 import {modelMap} from "../utils/values";
-import {GEMINI} from "../utils/constants";
+import {GEMINI, HUGGING_FACE} from "../utils/constants";
 
 function Header() {
 
     const addKey = () => {
         const key = ""
-        const request = addAPIKeyRequest(modelMap[GEMINI].provider, key)
+        const request = addAPIKeyRequest(modelMap[HUGGING_FACE].provider, key)
         console.log(request)
         window.electronAPI.sendToPython(request)
     }
