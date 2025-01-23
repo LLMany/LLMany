@@ -44,6 +44,6 @@ def test_execute_all_chats_request():
             }
         )
 
-        mock_print.assert_called_once_with(expected_output)
+        mock_print.assert_called_once_with(expected_output, flush=True)
 
     mock_database_handler.get_all_chats.assert_called_once()

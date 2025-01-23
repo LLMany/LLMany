@@ -50,4 +50,4 @@ def test_execute_new_chat_request(mocker):
         "chat_id": 123,
     }
 
-    builtins.print.assert_called_once_with(json.dumps(expected_output))
+    builtins.print.assert_called_once_with(json.dumps(expected_output), flush=True)
