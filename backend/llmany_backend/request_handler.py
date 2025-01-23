@@ -24,7 +24,6 @@ class RequestHandler:
         connection: Connection,
     ) -> None:
         self.database_handler_factory: DatabaseHandlerFactory = database_handler_factory
-        self.model_handler_factory: ModelHandlerFactory = model_handler_factory
         self.connection = connection
         self.database_handler = self.database_handler_factory.create_database_handler(
             "SQLite3", self.connection
@@ -47,7 +46,6 @@ class RequestHandler:
                 return MessageRequest.from_dict(
                     request_data,
                     self.database_handler,
-                    self.model_handler_factory,
                 )
             case "add_api_key":
                 return AddApiKeyRequest.from_dict(request_data, self.database_handler)

@@ -11,7 +11,8 @@ from llmany_backend.model_handlers import (
 
 
 class ModelHandlerFactory:
-    def create_model_handler(self, model_type: str, api_key: str) -> ModelHandler:
+    @staticmethod
+    def create_model_handler(model_type: str, api_key: str) -> ModelHandler:
         match model_type:
             case "OpenAI":
                 return OpenAIHandler(api_key)
