@@ -4,6 +4,7 @@ from llmany_backend.model_handlers import (
     OpenAIHandler,
     AnthropicHandler,
     QwenHandler,
+    GrokHandler,
     DeepseekHandler,
     HuggingfaceHandler,
 )
@@ -24,5 +25,9 @@ class ModelHandlerFactory:
                 return DeepseekHandler(api_key)
             case "HuggingFace":
                 return HuggingfaceHandler(api_key)
+            case "Grok":
+                return GrokHandler(api_key)
+            case "Deepseek":
+                return DeepseekHandler(api_key)
             case _:
                 raise ValueError(f"Unsupported model type: {model_type}")
