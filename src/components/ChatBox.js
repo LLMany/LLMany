@@ -40,19 +40,19 @@ function ChatBox() {
     }
 
 
-    // Send OnClick function to children for sending messages and fetching response
-    const onSendMessage = (message) => {
+    const onSendMessage = async (message) => {
         if (message === EMPTY_INPUT) {
             return;
         }
         addMessageToChat(addUserMessage(message));
         if (currentChatID === EMPTY_CHAT) {
             let modelProvider = modelMap[currentModel].provider;
-            getNewChatID(modelProvider, currentModel, setCurrentChatID);
+            await getNewChatID(modelProvider, currentModel, setCurrentChatID);
             getAllChats(setChatHistory)
-            // Add chat to history
+            sendMessageToChat(currentChatID, message, addMessageToChat);
+        } else {
+            sendMessageToChat(currentChatID, message, addMessageToChat);
         }
-        sendMessageToChat(currentChatID, message, addMessageToChat);
     }
 
     return (
