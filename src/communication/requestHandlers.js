@@ -39,9 +39,10 @@ export const sendMessageToChat = (chatID, message, addResponse) => {
     window.electronAPI.onPythonMessage((data)=> {
         const receivedObject = JSON.parse(data);
         console.log("BBBBBBBBBBB " + receivedObject);
-        if (receivedObject?.type === 'message')
+        if (receivedObject?.type === 'message'){
             responseMessage = receivedObject?.content ?? EMPTY_INPUT;
-        addResponse(responseMessage);
+            addResponse(responseMessage);
+        } 
     })
 }
 
