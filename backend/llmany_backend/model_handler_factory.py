@@ -21,11 +21,13 @@ class ModelHandlerFactory:
                 return AnthropicHandler(api_key)
             case "Qwen":
                 return QwenHandler(api_key)
+            case "Deepseek":
+                return DeepseekHandler(api_key)
+            case "HuggingFace":
+                return HuggingfaceHandler(api_key)
             case "Grok":
                 return GrokHandler(api_key)
             case "Deepseek":
                 return DeepseekHandler(api_key)
-            case "HuggingFace":
-                return HuggingfaceHandler()
             case _:
                 raise ValueError(f"Unsupported model type: {model_type}")
