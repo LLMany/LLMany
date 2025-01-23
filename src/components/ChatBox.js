@@ -25,6 +25,7 @@ function ChatBox() {
     },[messages])
 
     const addMessageToChat = (responseMessage) => {
+        console.log("DUPSKO" + JSON.stringify(responseMessage))
         setMessages((prevMessages) => [...prevMessages, responseMessage]);
     }
 
