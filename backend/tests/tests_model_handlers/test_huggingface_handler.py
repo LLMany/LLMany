@@ -14,7 +14,7 @@ def test_send_message(mocker):
         return_value=mock_pipeline,
     )
 
-    handler = HuggingfaceHandler()
+    handler = HuggingfaceHandler(api_key=" ")
 
     response = handler.send_message(
         model="Qwen/Qwen2.5-Coder-1.5B-Instruct", message="Hello", history=[]

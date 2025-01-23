@@ -52,7 +52,7 @@ class MessageRequest(Request):
             returned_value = {
                 "type": "message",
                 "chat_id": self.chat_ID,
-                "content": "No API key provided for the model type: {self.model_type}",
+                "content": f"No API key provided for the model type: {self.model_type}",
             }
         else:
             model: ModelHandler = self.model_handler_factory.create_model_handler(

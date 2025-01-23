@@ -23,6 +23,6 @@ class ModelHandlerFactory:
             case "Deepseek":
                 return DeepseekHandler(api_key)
             case "HuggingFace":
-                return HuggingfaceHandler()
+                return HuggingfaceHandler(api_key)
             case _:
                 raise ValueError(f"Unsupported model type: {model_type}")
