@@ -39,10 +39,11 @@ def test_check_api_key_request_execute_api_key_exists():
             json.dumps(
                 {
                     "type": "check_api_key",
-                    "chat_id": model_type,
+                    "model_type": model_type,
                     "exists": True,
                 }
-            )
+            ),
+            flush=True,
         )
 
 
@@ -61,8 +62,9 @@ def test_check_api_key_request_execute_api_key_not_exists():
             json.dumps(
                 {
                     "type": "check_api_key",
-                    "chat_id": model_type,
+                    "model_type": model_type,
                     "exists": False,
                 }
-            )
+            ),
+            flush=True,
         )

@@ -46,6 +46,6 @@ def test_chat_history_request_execute():
             "messages": chat_history,
         }
 
-        mock_print.assert_called_once_with(json.dumps(expected_output))
+        mock_print.assert_called_once_with(json.dumps(expected_output), flush=True)
 
         mock_database_handler.get_chat_history.assert_called_once_with(chat_id)
