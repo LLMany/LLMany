@@ -8,7 +8,6 @@ import json
 class MessageRequest(LLManyRequest):
     def __init__(
         self,
-        model_handler: ModelHandlerFactory,
         database_handler: DatabaseHandler,
         model_type: str,
         model: str,
@@ -16,7 +15,6 @@ class MessageRequest(LLManyRequest):
         chat_history: list[dict[str, str]],
         contents: str,
     ) -> None:
-        self.model_handler_factory: ModelHandlerFactory = model_handler
         self.database_handler: DatabaseHandler = database_handler
         self.model_type: str = model_type
         self.model: str = model
@@ -29,7 +27,6 @@ class MessageRequest(LLManyRequest):
         cls,
         request: dict,
         database_handler: DatabaseHandler,
-        model_handler_factory: ModelHandlerFactory,
     ):
         model_info: dict[str, str] = database_handler.get_model_for_chat(
             request["chat_id"]
@@ -37,7 +34,6 @@ class MessageRequest(LLManyRequest):
         chat_history = database_handler.get_chat_history(request["chat_id"])
 
         return cls(
-            model_handler_factory,
             database_handler,
             model_info["model_type"],
             model_info["model"],
@@ -57,7 +53,7 @@ class MessageRequest(LLManyRequest):
                 "content": f"No API key provided for the model type: {self.model_type}",
             }
         else:
-            model: ModelHandler = self.model_handler_factory.create_model_handler(
+            model: ModelHandler = ModelHandlerFactory.create_model_handler(
                 self.model_type, api_key
             )
             response: str = model.send_message(
