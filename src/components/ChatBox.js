@@ -19,7 +19,9 @@ function ChatBox() {
     const [messages, setMessages] = messageList;
 
     useEffect(() => {
+        console.log("---------------");
         console.log(messages)
+        console.log("---------------");
     },[messages])
 
     const addMessageToChat = (responseMessage) => {

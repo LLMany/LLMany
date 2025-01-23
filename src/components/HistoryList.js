@@ -5,22 +5,23 @@ import {placeholderChats} from "../utils/placeholderData"
 import {EMPTY_CHAT} from "../utils/constants"
 import {allChatsRequest} from "../communication/requestCreators";
 import message from "./Message";
-import {getAllChats, getNewChatID} from "../communication/requestHandlers";
+import {getAllChats, getChatContent, getNewChatID} from "../communication/requestHandlers";
 import {modelMap} from "../utils/values";
 
 function HistoryList() {
 
     const [chatHistory, setChatHistory] = useState(placeholderChats)
-    const {chatID, model} = useContext(Context)
+    const {chatID, model, messageList} = useContext(Context)
 
     const [currentChatID, setCurrentChatID] = chatID
     const [currentModel, setCurrentModel] = model
-
+    const [messages, setMessages] = messageList
 
 
     useEffect(() => {
         getAllChats(setChatHistory)
-    }, [chatID]); //
+        getChatContent(currentChatID, setMessages)
+    }, [currentChatID]); //
 
     const addNewChat = () => {
         setCurrentChatID(EMPTY_CHAT)
