@@ -29,6 +29,7 @@ function HistoryList() {
 
     const chatsList = chatHistory.map((chat) => {
         return <HistoryElement
+            key={chat.chat_id}
             chatID={chat.chat_id}
             selected={currentChatID === chat.chat_id}
             onClick={() => {

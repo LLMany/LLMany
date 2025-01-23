@@ -7,6 +7,6 @@ export const DEFAULT_MODEL = CHAT_GPT;
 export const EMPTY_CHAT = "empty_chat";
 
 export const USER_MESSAGE = "user";
-export const MODEL_MESSAGE = "model";
+export const MODEL_MESSAGE = "assistant";
 
 export const EMPTY_INPUT = "";

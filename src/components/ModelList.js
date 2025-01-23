@@ -13,6 +13,7 @@ function ModelList() {
 
     const listItems = modelList.map((model) => {
         return <ModelElement
+            key={model}
             modelName={model}
             selected={currentModel === model}
             onClick={() => {

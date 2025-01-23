@@ -40,9 +40,9 @@ export const sendMessageToChat = (chatID, message, addResponse) => {
         const receivedObject = JSON.parse(data);
         console.log("BBBBBBBBBBB " + receivedObject);
         if (receivedObject?.type === 'message'){
-            responseMessage = receivedObject?.content ?? EMPTY_INPUT;
+            responseMessage = receivedObject ?? EMPTY_INPUT;
             addResponse(responseMessage);
-        } 
+        }
     })
 }
 
