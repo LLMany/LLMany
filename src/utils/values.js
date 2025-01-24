@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {CHAT_GPT, CLAUDE, GEMINI} from "./constants";
+import {CHAT_GPT, CLAUDE, GEMINI, HUGGING_FACE} from "./constants";
 import ModelList from "../components/ModelList";
 
 
@@ -16,9 +16,9 @@ class ModelDetails {
 
 const ChatGPTDetails = new ModelDetails(
     {
-        displayName: "Chat GPT",
+        displayName: "ChatGPT",
         provider: "OpenAI",
-        color: "green",
+        color: "rgb(116, 170, 156)",
         icon: "",
     }
 );
@@ -27,7 +27,7 @@ const GeminiDetails = new ModelDetails(
     {
         displayName: "Gemini",
         provider: "Google",
-        color: "blue",
+        color: "rgb(71, 150, 227)",
         icon: "",
     }
 );
@@ -35,21 +35,32 @@ const GeminiDetails = new ModelDetails(
 const ClaudeDetails = new ModelDetails(
     {
         displayName: "Claude",
-        provider: "Amazon",
-        color: "orange",
+        provider: "Anthropic",
+        color: "rgb(218, 119, 86)",
         icon: "",
     }
 );
+
+const HuggingFaceDetails = new ModelDetails(
+    {
+        displayName: "HuggingFace",
+        provider: "HuggingFace",
+        color: "rgb(254, 210, 57)",
+        icon: "",
+    }
+)
 
 
 export const modelMap = {
     [CHAT_GPT]: ChatGPTDetails,
     [GEMINI]: GeminiDetails,
     [CLAUDE]: ClaudeDetails,
+    [HUGGING_FACE]: HuggingFaceDetails,
 }
 
 export const modelList = [
     CHAT_GPT,
     GEMINI,
-    CLAUDE
+    CLAUDE,
+    HUGGING_FACE
 ];

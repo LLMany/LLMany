@@ -1,17 +1,19 @@
 const {app, BrowserWindow, ipcMain} = require('electron');
-const {sep, resolve, join} = require("node:path");
+const {sep, resolve, join, dirname} = require("node:path");
 const {spawn} = require("child_process");
 
 let mainWindow;
 let pythonProcess;
 
 function createWindow() {
+    console.log(join(__dirname, 'public', 'preload.js'))
     mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
         webPreferences: {
-            nodeIntegration: true,
-            preload: join(__dirname, 'preload'),
+            nodeIntegration: false,
+            contextIsolation: true,
+            preload: join(__dirname, 'public','preload.js'),
         },
     });
 
@@ -25,6 +27,14 @@ function createWindow() {
 }
 
 
+function sendToAllWindows(channel, data) {
+    BrowserWindow.getAllWindows().forEach(window => {
+        if (!window.isDestroyed()) {
+            window.webContents.send(channel, data);
+        }
+    });
+}
+
 app.on('activate', () => {
     if (mainWindow === null) {
         createWindow();
@@ -32,22 +42,31 @@ app.on('activate', () => {
 });
 
 function startPythonBackend() {
-    const dir = resolve(__dirname, '..');
-    const scriptPath = join(dir, 'backend', 'llmany_backend', 'main.py');
+    const scriptPath = join(__dirname, 'backend', 'llmany_backend', 'main.py');
 
     process.chdir('backend');
     pythonProcess = spawn('poetry', ['run', 'python', scriptPath]);
     process.chdir('..')
-
+    console.log("Started backend")
     // Handle Python process output
     pythonProcess.stdout.on('data', (data) => {
-        const message = data.toString().trim();
+        console.log("----\n" + data + "----\n");
+
+        const message = data.toString().split('\n')[0].trim();
+
+        console.log("Received python data in electron:\n" + message)
         try {
             // Parse Python output as JSON
             const jsonData = JSON.parse(message);
-            mainWindow.webContents.send('from-python', jsonData);
+            if (mainWindow && !mainWindow.isDestroyed()) {
+                console.log('Send to main process: ' + message);
+                sendToAllWindows('from-python', message);
+            } else {
+                console.log('mainWindow is not available.');
+                ipcMain.handle('from-python', jsonData);
+            }
         } catch (e) {
-            console.log('Python output:', message);
+            console.log('Python output with exception:\n' + e + "\n" + message);
         }
     });
 
@@ -60,15 +79,14 @@ function startPythonBackend() {
     });
 }
 
-// Handle IPC messages from React
-ipcMain.handle('to-python', async (event, data) => {
+ipcMain.on('to-python', (event, data) => {
+    console.log("Received request from renderer")
+    console.log(JSON.stringify(data));
     if (pythonProcess && !pythonProcess.killed) {
-        // Send data to Python process
         pythonProcess.stdin.write(JSON.stringify(data) + '\n');
-        return { success: true };
     }
-    return { success: false, error: 'Python process not running' };
-});
+})
+
 
 app.whenReady().then(createWindow);
 

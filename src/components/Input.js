@@ -6,13 +6,14 @@ function Input({onSubmit}) {
     const [input, setInput] = useState(EMPTY_INPUT);
 
     return (
-        <div className="Input">
+        <div className="flex flex-row w-full space-x-2 p-2">
             <input
+                placeholder={"Enter a message..."}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                className="MessageInput"></input>
+                className="w-full placeholder-primary bg-secondary rounded-full px-3 py-1"></input>
             <button
-                className="SendButton"
+                className="bg-header hover:bg-button rounded-full px-3 font-semibold transition-colors duration-300"
                 onClick={() => {
                     onSubmit(input);
                     setInput(EMPTY_INPUT);

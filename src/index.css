@@ -1,13 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* width */
+
+::-webkit-scrollbar {
+    width: 0px;
+}
+
+/* Track */
+
+::-webkit-scrollbar-track {
+}
+
+/* Handle */
+
+::-webkit-scrollbar-thumb {
+    background: #222;
+    border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+@layer base {
+    :root {
+        --primary: rgba(99, 97, 97);
+        --secondary: rgba(68, 66, 66);
+        --text: rgba(255, 255, 255);
+        --bg-primary: rgba(45, 43, 43);
+        --bg-secondary: rgba(50, 48, 48);
+        --header: rgba(24, 24, 24);
+        --success: rgba(56, 142, 60);
+        --failure: rgba(211, 47, 47);
+        --button: rgba(29, 89, 64);
+    }
+}
+
+
+.dark {
+    --primary: rgba(99, 97, 97);
+    --secondary: rgba(68, 66, 66);
+    --text: rgba(255, 255, 255);
+    --bg-primary: rgba(45, 43, 43);
+    --bg-secondary: rgba(50, 48, 48);
+    --header: rgba(24, 24, 24);
+    --success: rgba(56, 142, 60);
+    --failure: rgba(211, 47, 47);
+    --button: rgba(29, 89, 64);
+}
+
+
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }

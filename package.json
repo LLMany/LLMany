@@ -16,12 +16,13 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-scripts": "5.0.1",
+    "tailwindcss": "^3.4.17",
     "wait-on": "^8.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
     "react-start": "cross-env BROWSER=NONE react-scripts start",
-    "electron-start": "cross-env DEV=1 electron .",
+    "electron-start": "cross-env DEV=1 electron . --enable-logging",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
@@ -29,7 +30,7 @@
     "package": "electron-forge package",
     "make": "electron-forge make"
   },
-  "main": "./src/electron.js",
+  "main": "electron.js",
   "eslintConfig": {},
   "browserslist": {
     "production": [

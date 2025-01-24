@@ -8,12 +8,7 @@ function EmptyChat() {
     const displayName = modelMap[currentModel].displayName;
 
     return (
-        <div style={{
-            padding: '8px',
-            width: '100%',
-            height: '100%'
-        }}
-        >
+        <div className={'content-center text-center w-full h-full text-primary font-semibold text-lg'}>
             Send a message to the chat with {displayName}.
         </div>
     )

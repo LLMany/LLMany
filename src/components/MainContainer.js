@@ -4,12 +4,7 @@ import ChatBox from "./ChatBox";
 
 function MainContainer() {
     return (
-        <div style={{
-            display: 'flex',
-            flexDirection: 'row',
-            gap: '8px',
-            height: '500px',
-        }}>
+        <div className={'flex flex-row max-h p-2 w-full bg-bgPrimary'}>
             <Sidebar/>
             <ChatBox/>
         </div>
