@@ -14,7 +14,7 @@ function Chat({messages}) {
 
     return (
         <div
-            className="max-h text-text bg-primary h-full w-full bg-transparent p-3"
+            className="flex flex-col space-y-1 max-h text-text bg-primary h-full w-full bg-transparent p-3"
         >
             {
                 messagesWithKeys.map(({role, content, key}) => (

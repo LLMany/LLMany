@@ -16,7 +16,7 @@ class ModelDetails {
 
 const ChatGPTDetails = new ModelDetails(
     {
-        displayName: "Chat GPT",
+        displayName: "ChatGPT",
         provider: "OpenAI",
         color: "rgb(116, 170, 156)",
         icon: "",

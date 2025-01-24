@@ -18,7 +18,7 @@ function Header() {
     return (
         <div className = "flex flex-row font-bold justify-between items-center p-4 bg-header shadow w-full">
             <div className="text-2xl">LLMany</div>
-            <div className="space-x-4">
+            <div className="space-x-4 p-2 cursor-pointer">
                 <button onClick={addKey}>Add API key</button>
             </div>
             <APIKeyModal

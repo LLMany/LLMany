@@ -44,7 +44,6 @@ function ChatBox() {
         }
     }
 
-
     const onSendMessage = (message) => {
         if (message === EMPTY_INPUT) {
             return;
