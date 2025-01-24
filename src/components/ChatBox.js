@@ -44,16 +44,17 @@ function ChatBox() {
         }
     }
 
-    const onSendMessage = (message) => {
+    const onSendMessage = async (message) => {
         if (message === EMPTY_INPUT) {
             return;
         }
         addMessageToChat(addUserMessage(message));
         if (currentChatID === EMPTY_CHAT) {
             let modelProvider = modelMap[currentModel].provider;
-            getNewChatID(modelProvider, currentModel, setCurrentChatID);
+            const newChatID = await getNewChatID(modelProvider, currentModel, setCurrentChatID);
+            console.log("NEW CHAT ID" + newChatID);
             getAllChats(setChatHistory)
-            sendMessageToChat(currentChatID, message, addMessageToChat);
+            sendMessageToChat(newChatID, message, addMessageToChat);
         } else {
             sendMessageToChat(currentChatID, message, addMessageToChat);
         }

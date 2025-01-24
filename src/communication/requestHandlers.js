@@ -22,17 +22,27 @@ export const getAllChats = (setChatHistory) => {
     })
 }
 
-export const getNewChatID = (modelProvider, model, setCurrentChatID) => {
-    let newChatID = EMPTY_CHAT;
-    window.electronAPI.sendToPython(newChatRequest(modelProvider, model));
-    window.electronAPI.onPythonMessage((data) => {
-        const receivedObject = JSON.parse(data);
-        if (receivedObject?.type === 'new_chat') {
-            newChatID = receivedObject?.chat_id ?? EMPTY_CHAT;
-            setCurrentChatID(newChatID);
-        }
-    })
-}
+export const getNewChatID = (modelProvider, model) => {
+    return new Promise((resolve, reject) => {
+        let newChatID = EMPTY_CHAT;
+
+        // Send a request to Python
+        window.electronAPI.sendToPython(newChatRequest(modelProvider, model));
+
+        // Listen for the response from Python
+        window.electronAPI.onPythonMessage((data) => {
+            try {
+                const receivedObject = JSON.parse(data);
+                if (receivedObject?.type === 'new_chat') {
+                    newChatID = receivedObject?.chat_id ?? EMPTY_CHAT;
+                    resolve(newChatID); // Resolve the promise with the chat ID
+                }
+            } catch (error) {
+                reject(error); // Reject the promise if JSON parsing fails
+            }
+        });
+    });
+};
 
 
 export const sendMessageToChat = (chatID, message, addResponse) => {
@@ -64,10 +74,8 @@ export const checkAPIKey =  (provider, setKeyExists) => {
     window.electronAPI.sendToPython(checkAPIKeyRequest(provider))
     window.electronAPI.onPythonMessage((data) => {
         const receivedObject = JSON.parse(data);
-        console.log(" KEY:" + data);
         if (receivedObject?.type === 'check_api_key' && receivedObject?.model_type === provider) {
              const keyExists = receivedObject?.["exists"];
-             console.log(provider + ": " + keyExists);
              setKeyExists(keyExists);
         }
     });
