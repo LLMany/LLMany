@@ -18,20 +18,24 @@ function ChatBox() {
     const [currentChatID, setCurrentChatID] = chatID;
     const [messages, setMessages] = messageList;
 
-    useEffect(() => {
-        console.log("---------------");
-        console.log(messages)
-        console.log("---------------");
-    },[messages])
 
+    const handleMessages = (userMessageContent, modelResponse) => {
+        setMessages(prevMessages => {
+            const newMessages = [
+                ...prevMessages,
+                { role: USER_MESSAGE, content: userMessageContent },
+                ...(modelResponse ? [{ role: MODEL_MESSAGE, ...modelResponse }] : []), // Add model response if available
+            ];
+            return newMessages;
+        });
+    };
+    
     const addMessageToChat = (responseMessage) => {
-        console.log("DUPSKO" + JSON.stringify(responseMessage))
-        setMessages((prevMessages) => [...prevMessages, responseMessage]);
-    }
-
-    const refreshMessages = (newMessages) => {
-        setMessages(newMessages);
-    }
+        setMessages((prevMessages) => {
+            const newMessages = [...prevMessages, responseMessage];
+            return newMessages;
+        });
+    };
 
     const addUserMessage = (message) => {
         return {

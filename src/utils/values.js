@@ -44,7 +44,7 @@ const ClaudeDetails = new ModelDetails(
 const HuggingFaceDetails = new ModelDetails(
     {
         displayName: "HuggingFace",
-        provider: "Qwen",
+        provider: "HuggingFace",
         color: "rgb(254, 210, 57)",
         icon: "",
     }
