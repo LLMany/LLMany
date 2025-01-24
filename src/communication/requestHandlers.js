@@ -1,7 +1,13 @@
-import {placeholderChats} from "../utils/placeholderData";
-import {EMPTY_CHAT, EMPTY_INPUT, USER_MESSAGE} from "../utils/constants";
-import {chatHistoryRequest, messageRequest, newChatRequest} from "./requestCreators";
-import message from "../components/Message";
+import {EMPTY_CHAT, EMPTY_INPUT, GEMINI} from "../utils/constants";
+import {
+    addAPIKeyRequest,
+    chatHistoryRequest,
+    checkAPIKeyRequest,
+    messageRequest,
+    newChatRequest,
+    removeAPIKeyRequest
+} from "./requestCreators";
+import {modelMap} from "../utils/values";
 
 
 export const getAllChats = (setChatHistory) => {
@@ -9,13 +15,11 @@ export const getAllChats = (setChatHistory) => {
     window.electronAPI.sendToPython({"type": "all_chats"})
     window.electronAPI.onPythonMessage((data) => {
         const receivedObject = JSON.parse(data);
-        console.log(receivedObject + receivedObject.type + receivedObject.chats);
-        if (receivedObject?.type === 'all_chats')
+        if (receivedObject?.type === 'all_chats') {
             chats = receivedObject?.chats ?? [];
-        setChatHistory(chats);
+            setChatHistory(chats);
+        }
     })
-    console.log(chats);
-    return chats;
 }
 
 export const getNewChatID = (modelProvider, model, setCurrentChatID) => {
@@ -33,11 +37,9 @@ export const getNewChatID = (modelProvider, model, setCurrentChatID) => {
 
 export const sendMessageToChat = (chatID, message, addResponse) => {
     let responseMessage = EMPTY_INPUT;
-    console.log(" -> " + message);
     window.electronAPI.sendToPython(messageRequest(chatID, message));
     window.electronAPI.onPythonMessage((data) => {
         const receivedObject = JSON.parse(data);
-        console.log("BBBBBBBBBBB " + receivedObject);
         if (receivedObject?.type === 'message') {
             responseMessage = receivedObject?.content ?? EMPTY_INPUT;
             addResponse(responseMessage);
@@ -55,4 +57,26 @@ export const getChatContent = (chatID, setMessages) => {
             setMessages(chatContent);
         }
     })
+}
+
+export const checkAPIKey =  (provider, setKeyExists) => {
+    console.log(" SENT KEY QUERY -> " + provider);
+    window.electronAPI.sendToPython(checkAPIKeyRequest(provider))
+    window.electronAPI.onPythonMessage((data) => {
+        const receivedObject = JSON.parse(data);
+        console.log(" KEY:" + data);
+        if (receivedObject?.type === 'check_api_key' && receivedObject?.model_type === provider) {
+             const keyExists = receivedObject?.["exists"];
+             console.log(provider + ": " + keyExists);
+             setKeyExists(keyExists);
+        }
+    });
+}
+
+export const addAPIKey = (modelType, key) => {
+    window.electronAPI.sendToPython(addAPIKeyRequest(modelType, key))
+}
+
+export const removeAPIKey = (modelType) => {
+    window.electronAPI.sendToPython(removeAPIKeyRequest(modelType))
 }

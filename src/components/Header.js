@@ -1,26 +1,30 @@
 import {addAPIKeyRequest, checkAPIKeyRequest} from "../communication/requestCreators";
 import {modelMap} from "../utils/values";
 import {GEMINI} from "../utils/constants";
+import {useState} from "react";
+import APIKeyModal from "./APIKeyModal";
 
 function Header() {
 
+    const [modalOpen, setModalOpen] = useState(false);
+
     const addKey = () => {
-        const key = ""
-        const request = addAPIKeyRequest(modelMap[GEMINI].provider, key)
-        console.log(request)
-        window.electronAPI.sendToPython(request)
+        setModalOpen(true);
     }
 
     const checkKey = () => {
         window.electronAPI.sendToPython(checkAPIKeyRequest(modelMap[GEMINI].provider))
     }
     return (
-        <div className = "flex flex-row justify-between items-center m-2">
-            <div className="font-bold ">LLMany</div>
+        <div className = "flex flex-row font-bold justify-between items-center p-4 bg-header shadow w-full">
+            <div className="text-2xl">LLMany</div>
             <div className="space-x-4">
                 <button onClick={addKey}>Add API key</button>
-                <button onClick={checkKey}>Check API key</button>
             </div>
+            <APIKeyModal
+                open={modalOpen}
+                onClose={() => setModalOpen(false)}
+            />
         </div>
     )
 }

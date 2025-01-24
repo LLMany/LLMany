@@ -40,17 +40,16 @@ function HistoryList() {
     })
 
     return (
-        <div style={{
-            display: "flex",
-            flexDirection: "column",
-            fontWeight: "bold",
-            gap: "4px"
-        }}>
-            <br/>
-            History
-            <button onClick={addNewChat}>New chat</button>
-            {chatsList}
+        <div className={'flex flex-col max-h p-1 pb-3 rounded-md bg-bgSecondary'}>
+            <div className={'flex flex-row max-h justify-between px-1 pb-2 pt-1 font-bold  text-white'}>
+                History
+                <button onClick={addNewChat}>+</button>
+            </div>
+            <div className={'flex flex-col h-72 overflow-y-scroll space-y-1 justify-start'}>
+                {chatsList}
+            </div>
         </div>
+
     )
 }
 

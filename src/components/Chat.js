@@ -7,20 +7,12 @@ function Chat({messages}) {
 
     return (
         <div
-            style={{
-                overflowY: "scroll",
-                padding: "4px",
-                display: 'flex',
-                flexDirection: 'column',
-                height: '100%',
-                width: '100%',
-                gap: '4px',
-            }}
+            className="max-h text-text bg-primary h-full w-full bg-transparent p-3"
         >
             {
-                messages.map(({owner, content}) => (
+                messages.map(({role, content}) => (
                     <div key = {content}>
-                    {owner === USER_MESSAGE ? ( // Access message.role
+                    {role === USER_MESSAGE ? ( // Access message.role
                         <UserMessage message={content} /> // Access message.content
                         ) : (
                         <ModelMessage message={content} /> // Access message.content

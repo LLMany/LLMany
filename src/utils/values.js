@@ -18,7 +18,7 @@ const ChatGPTDetails = new ModelDetails(
     {
         displayName: "Chat GPT",
         provider: "OpenAI",
-        color: "green",
+        color: "rgb(116, 170, 156)",
         icon: "",
     }
 );
@@ -27,7 +27,7 @@ const GeminiDetails = new ModelDetails(
     {
         displayName: "Gemini",
         provider: "Google",
-        color: "blue",
+        color: "rgb(71, 150, 227)",
         icon: "",
     }
 );
@@ -36,7 +36,7 @@ const ClaudeDetails = new ModelDetails(
     {
         displayName: "Claude",
         provider: "Anthropic",
-        color: "orange",
+        color: "rgb(218, 119, 86)",
         icon: "",
     }
 );
@@ -45,7 +45,7 @@ const HuggingFaceDetails = new ModelDetails(
     {
         displayName: "HuggingFace",
         provider: "Qwen",
-        color: "green",
+        color: "rgb(254, 210, 57)",
         icon: "",
     }
 )

@@ -1,30 +1,23 @@
 import {modelMap} from "../utils/values";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 function ModelElement({modelName, selected, onClick}) {
 
     const [mouseOver, setMouseOver] = useState(false);
     const displayName = modelMap[modelName].displayName;
+    const highlightColor = modelMap[modelName].color
+    const borderColorClass = selected ? `border-[${highlightColor}]` : "border-secondary";
+    const bgColorClass = selected ? `bg-bgSecondary` : "bg-secondary";
 
-
+    useEffect(() => {
+        console.log("----->" + highlightColor);
+    })
     return (
         <div
-            style={{
-                flex: 1,
-                borderRadius: '8px',
-                padding: '4px',
-                background: selected ? '#666666' : '#444444',
-                color: 'white',
-                cursor: 'pointer',
-                border: mouseOver ? '2px solid white' : '2px solid #666666',
-            }}
+            className={`${borderColorClass} ${bgColorClass} hover:border-primary font-semibold px-3 py-1 rounded-md cursor-pointer border-2 border-secondary`}
             onClick={onClick}
-            onMouseOver={() => setMouseOver(true)}
-            onMouseLeave={() => setMouseOver(false)}
         >
             {displayName}
-            <br/>
-            {selected ? <> chat key... </> : <> </>}
         </div>
     )
 }

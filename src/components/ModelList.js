@@ -24,19 +24,16 @@ function ModelList() {
     });
 
     return (
-        <>
-            <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                fontWeight: 'bold',
-                gap: '4px',
-            }}>
+        <div className={'flex flex-col max-h p-1 rounded-md bg-bgSecondary'}>
+            <div className={'flex flex-row max-h justify-between px-1 pb-2 pt-1 font-bold  text-white'}>
                 Models
+            </div>
+            <div className={'flex flex-col overflow-y-scroll space-y-1'}>
                 {listItems}
             </div>
-        </>
+        </div>
     )
 }
 
 
-    export default ModelList;
+export default ModelList;

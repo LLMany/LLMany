@@ -3,18 +3,11 @@ import {useState} from "react";
 function HistoryElement({chatID, selected, onClick}) {
 
     const [mouseOver, setMouseOver] = useState(false);
+    const bgColorClass = selected ? `bg-bgSecondary` : "bg-secondary";
 
     return (
         <div
-            style={{
-                flex: 1,
-                borderRadius: '8px',
-                padding: '4px',
-                background: selected ? '#666666' : '#444444',
-                color: 'white',
-                cursor: 'pointer',
-                border: mouseOver ? '2px solid white' : '2px solid #666666',
-            }}
+            className={`border-secondary ${bgColorClass} hover:border-primary font-semibold px-3 py-1 rounded-md cursor-pointer border-2 border-secondary`}
             onClick={onClick}
             onMouseOver={() => setMouseOver(true)}
             onMouseLeave={() => setMouseOver(false)}

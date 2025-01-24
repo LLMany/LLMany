@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Header from "./components/Header";
 import MainContainer from "./components/MainContainer";
 import { DEFAULT_MODEL, EMPTY_CHAT } from "./utils/constants";
+import APIKeyModal from "./components/APIKeyModal";
 
 export const Context = React.createContext();
 
@@ -25,7 +26,7 @@ function App() {
                 messageList: [messages, setMessages],
                 pythonData: [receivedData, setReceivedData] // Provide received data in context
             }}
-            className="App"
+            className="max-h text-text bg-primary"
         >
             <Header />
             <MainContainer />

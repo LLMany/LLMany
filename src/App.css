@@ -1,10 +1,9 @@
 html, body, .App {
-  background: #222831;
+  background: #2d2b2b;
   color: #fff;
   height: 100%;
-  padding-left: 4px;
-  padding-right: 4px;
 }
+
 
 
 .Input {

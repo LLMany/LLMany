@@ -57,16 +57,7 @@ function ChatBox() {
     }
 
     return (
-        <div style={{
-            flex: 3,
-            padding: '4px',
-            background: '#31363F',
-            borderRadius: '8px',
-            height: '100%',
-            display: 'flex',
-            gap: '8px',
-            flexDirection: 'column',
-        }}>
+        <div className={'flex flex-col max-h w-full ml-2 bg-bgSecondary rounded-md'}>
             { currentChatID === EMPTY_CHAT ?
                 <EmptyChat />  :
                 <Chat messages={messages} />
